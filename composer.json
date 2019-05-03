@@ -1,0 +1,43 @@
+{
+  "name": "apility/netflex-sdk",
+  "description": "The Netflex platform SDK",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "sdk",
+    "netflex",
+    "framework"
+  ],
+  "homepage": "https://github.com/apility/netflex-sdk",
+  "authors": [
+    {
+      "name": "Olav Øyen",
+      "email": "olav@apility.no",
+      "homepage": "https://github.com/olavoyen",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/apility/netflex-sdk/issues",
+    "source": "https://github.com/apility/netflex-sdk"
+  },
+  "autoload": {
+    "psr-4": {
+      "Netflex\\": "src/Netflex"
+    },
+    "files": [
+      "src/NF.php"
+    ]
+  },
+  "config": {
+    "platform": {
+      "php": "7.2"
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "^6.2",
+    "nesbot/carbon": "^1.21",
+    "phpfastcache/phpfastcache": "^7.0",
+    "php-console/php-console": "^3.1"
+  }
+}
