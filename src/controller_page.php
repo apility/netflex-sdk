@@ -9,7 +9,7 @@ require_once(__DIR__ . '/model/autoloader.php');
 // Developer document. Not for production
 
 // Get and clean url for security
-$real_url = explode('?', $_GET['_path'])[0];
+$real_url = explode('?', urldecode($_GET['_path']))[0];
 $url = trim(convert_to_safe_string($real_url, 'long'), '/');
 
 if (strpos($url, '_/') === 0) {

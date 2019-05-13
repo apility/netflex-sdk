@@ -79,7 +79,7 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  * @param string $fill = '255,255,255'
  * @return string
  */
-function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255')
+function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0')
 {
   if ($compression == 'o') {
     $dimensions = '';
