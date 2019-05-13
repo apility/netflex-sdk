@@ -171,7 +171,7 @@ function add_to_cart($order_id, $entry_id, $variant_id, $no_of_entries = 1, $ent
     'variant_id' => $variant_id,
     'no_of_entries' => $no_of_entries,
     'entries_comments' => $entries_comments
-  ], $this->get_order($order_id));
+  ], get_order($order_id));
 }
 
 /**

@@ -128,7 +128,7 @@ function get_full_content_array($page_id)
  */
 function get_page_name($id)
 {
-  return $this->get_page_data($id, 'name');
+  return get_page_data($id, 'name');
 }
 
 /**
