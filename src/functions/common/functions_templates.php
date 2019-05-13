@@ -44,7 +44,7 @@ function get_block($alias, $vars = [])
  * @param string $block
  * @param string $area
  * @param string $column
- * @return void
+ * @return mixed
  */
 function get_static_content($block, $area, $column)
 {
