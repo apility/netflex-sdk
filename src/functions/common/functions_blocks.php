@@ -166,7 +166,7 @@ function get_block_content_image($area, $dimensions, $compression_type, $class =
   $alt = get_page_content_string($area, 'description');
   $title = get_page_content_string($area, 'title');
 
-  return get_page_content_image($area, 'image', $dimensions, $compression_type, $class);
+  return get_page_content_image($area, 'image', $dimensions, $compression_type, $class, $fill);
 }
 
 /**
