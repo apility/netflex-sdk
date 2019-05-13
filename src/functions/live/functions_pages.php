@@ -77,11 +77,12 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  * @param string $compression
  * @param string $class = null
  * @param string $fill = '255,255,255'
+ * @param bool $lazy = false
  * @return string
  */
-function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255')
+function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255', $lazy = false)
 {
-  if ($compression == 'o') {
+  if ($compression === 'o') {
     $dimensions = '';
   }
 
@@ -90,11 +91,13 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
   $title = get_page_content($area, 'title');
 
   if ($image) {
-
     $domain = get_setting('site_cdn_protocol') . '://' . get_setting('site_cdn_url');
     $fill = ($compression === 'fill' ? ('/' . $fill) : '');
     $url = '/media/' . $compression . '/' . $dimensions . $fill . '/' . $image;
-    $src = $domain . $url;
+    $src = 'src="' . $domain . $url . '"';
+    $src = $lazy ? ('data-' . $src) : $src;
+    $blank = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    $fallback = $lazy ? ('src="' . $blank . '"') : '';
 
     return <<<HTML
     <picture>
@@ -104,7 +107,7 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
       <source srcset="$src?src=992w" media="(max-width: 992px)">
       <source srcset="$src?src=1200w" media="(max-width: 1200px)">
       <source srcset="$src">
-      <img class="$class" src="$src" alt="$alt" title="$title" />
+      <img class="$class" $src alt="$alt" title="$title" $fallback />
     </picture>
 HTML;
   }
