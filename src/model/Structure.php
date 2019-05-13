@@ -328,7 +328,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
 
   public static function findOrFail($id)
   {
-    $entry = self::find($id);
+    $entry = static::find($id);
 
     if (!$entry) {
       throw new Exception('Entry not found');
