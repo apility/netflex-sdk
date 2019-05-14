@@ -343,6 +343,41 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
     return $entry;
   }
 
+  /**
+   * Resolve entry by url
+   *
+   * @param string $slug
+   * @return static
+   */
+  public static function resolve($slug)
+  {
+    $structureId = (new static)->directory;
+    $entry = resolve_entry([
+      'url' => $slug . '/',
+      'directory_id' => $structureId,
+      'fetch' => true
+    ]);
+    if ($entry) {
+      return static::generateObject($entry);
+    }
+  }
+
+  /**
+   * Resolve entry by url or fail
+   *
+   * @param string $slug
+   * @throws Exception
+   * @return static
+   */
+  public static function resolveOrFail($slug)
+  {
+    $entry = static::resolve($slug);
+    if ($entry) {
+      return $entry;
+    }
+    throw new Exception('Entry not resolved');
+  }
+
   public static function query(...$args)
   {
     $structureId = (new static)->directory;
