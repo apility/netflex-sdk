@@ -52,7 +52,7 @@ function get_order($id)
 /**
  * In Stock
  *
- * @deprecated 3.0.0
+ * @deprecated 1.1.0
  * @return int
  */
 function in_stock()
