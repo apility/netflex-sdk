@@ -6,6 +6,7 @@ The Netflex SDK is a framework for constructing website using the Netflex Conten
 [![Version](https://img.shields.io/github/tag/apility/netflex-sdk.svg?label=version)](https://github.com/apility/netflex-sdk/releases/latest)
 [![Contributors](https://img.shields.io/github/contributors/apility/netflex-sdk.svg?color=green)](https://github.com/apility/netflex-sdk/graphs/contributors)
 [![Docs](https://img.shields.io/badge/docs-docs.netflex.dev-blue.svg)](https://docs.netflex.dev/docs/1.0)
+![Downlaods](https://img.shields.io/packagist/dm/apility/netflex-sdk.svg)
 
 ![banner](https://d3lnipq2e3xuc0.cloudfront.net/media/o/1557406595/banner.png)
 
