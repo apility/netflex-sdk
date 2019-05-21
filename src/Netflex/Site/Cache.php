@@ -14,9 +14,9 @@ class Cache
 	private static $key;
 	private static $cache;
 
-	public function __construct() {
+	public function __construct($key) {
 
-    self::$key = NF::$sitename;
+    self::$key = $key;
 
     $config = null;
     $driver = class_exists('Memcached') ? 'memcached' : 'files';
