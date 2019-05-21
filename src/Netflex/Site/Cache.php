@@ -14,12 +14,11 @@ class Cache
 	private static $key;
 	private static $cache;
 
-	public function __construct($key) {
+	public function __construct($key, $driver = 'files') {
 
     self::$key = $key;
 
     $config = null;
-    $driver = class_exists('Memcached') ? 'memcached' : 'files';
 
     switch ($driver) {
       case 'memcached':

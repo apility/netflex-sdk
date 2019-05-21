@@ -75,7 +75,10 @@ class NF
     // Caching
     self::$cacheDir = self::$site_root . 'storage/cache/';
     // Memcached caching
-    self::$cache = new Cache($site);
+    self::$cache = new Cache(
+      $site,
+      class_exists('Memcached') ? 'memcached' : 'files'
+    );
 
     // Site configuration
     self::$config = self::getConfig();
