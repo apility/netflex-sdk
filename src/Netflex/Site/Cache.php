@@ -77,6 +77,23 @@ class Cache
     return !is_null($item->get());
   }
 
+  /**
+   * Checks cache and returns value if present. Computes the resolve function,
+   * stores and returns if not present.
+   * 
+   * @param string $key Cache key
+   * @param int $ttl TTL length, 0 is infinite
+   * @param \Closure Function that computes cache value if not already cached.
+   * @return mixed Cached value
+   */
+  public function resolve(string $key, int $ttl, \Closure $resolveFunction) {
+    if(self::has($key))
+      return self::fetch($key);
+    $results = $resolveFunction();
+    self::save($key, $results, $ttl);
+    return $results;
+  }
+
   public function save($key, $value, $ttl = 0, $tag = null) {
     $value = serialize($value);
     $item = self::$cache->getItem(self::getCacheKey($key));
