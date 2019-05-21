@@ -6,77 +6,41 @@ use Exception;
 
 class Site
 {
-  public $content;
-  public $templates;
-  public $labels;
-  public $pages;
-  public $structures;
-  public $statics;
-  public $nav;
-  public $variables;
+  public $content = NULL;
+  public $_templates = NULL;
+  public $_labels = NULL;
+  public $_pages = NULL;
+  public $_structures = NULL;
+  public $_statics = NULL;
+  public $_nav = NULL;
+  public $_variables = NULL;
 
-  public function loadGlobals () {
-    global $_mode;
-
-    $this->_pages = NF::$cache->fetch('pages');
-    if (!$this->_pages) {
-      $this->loadPages();
-      NF::$cache->save('pages', $this->_pages, 3600);
+  public function __get($name)
+  {
+    /*
+      Check if there is a _$name variable, if it is set and is null
+      Then perform the 'load$name' function, which populates the variable and stores it for later
+    */
+    $name = strtolower($name);
+    if($this->{"_" . $name} === NULL && method_exists($this, "load" . $name)) {
+      $this->{"_" . $name} = \NF::$cache->resolve($name, 3600, function() use ($name) {
+        return $this->{"load" . $name}();
+      });
+      return $this->{"_" . $name};
+    } else {
+      return $this->{"_" . $name};
     }
+    
+  }
 
-    $this->pages = [];
-
-    foreach ($this->_pages as $key => $page) {
-      if (!$page['published']) {
-        if ($_mode) {
-          $this->pages[$key] = $page;
-        }
-      } else {
-        $this->pages[$key] = $page;
-      }
-    }
-
-    $this->nav = NF::$cache->fetch('nav');
-    if ($this->nav == null) {
-      $this->loadNav();
-      NF::$cache->save('nav', $this->nav, 3600);
-    }
-
-    $this->variables = NF::$cache->fetch('variables');
-    if ($this->variables == null) {
-      $this->loadVariables();
-      NF::$cache->save('variables', $this->variables, 3600);
-    }
-
-    $this->statics = NF::$cache->fetch('statics');
-    if ($this->statics == null) {
-      $this->loadStatics();
-      NF::$cache->save('statics', $this->statics, 3600);
-    }
-
-    $this->templates = NF::$cache->fetch('templates');
-    if ($this->templates == null) {
-      $this->loadTemplates();
-      NF::$cache->save('templates', $this->templates, 3600);
-    }
-
-    $this->labels = NF::$cache->fetch('labels');
-    if ($this->labels == null) {
-      $this->loadLabels();
-      NF::$cache->save('labels', $this->labels, 3600);
-    }
-
-    $this->structures = NF::$cache->fetch('structures');
-    if ($this->structures == null) {
-      $this->loadStructures();
-      NF::$cache->save('structures', $this->structures, 3600);
-    }
-
+  /**
+   * Left to not break legacy
+   */
+  public function loadGlobals () {    
   }
 
   public function loadPage($id, $revision) {
     global $_mode;
-
     $this->content = NF::$cache->fetch('page/' . $id);
     if ($_mode || !$this->content) {
       $this->loadContent($id, $revision);
@@ -116,85 +80,97 @@ class Site
   public function loadStatics () {
     try {
       $statics = json_decode(NF::$capi->get('foundation/globals')->getBody(), true);
-
+      $ret = [];
       foreach ($statics as $static) {
         foreach ($static['globals'] as $global) {
-          $this->statics[$static['alias']][$global['alias']] = $global['content'];
+          $ret[$static['alias']][$global['alias']] = $global['content'];
         }
       }
+      return $ret;
     } catch (Exception $e) {
-      $this->statics = [];
+      return [];
     }
   }
 
   public function loadPages () {
+    
     $request = NF::$capi->get('builder/pages');
     $result = json_decode($request->getBody(), true);
 
+    $resolved_pages = [];
     if ($result) {
       foreach ($result as $page) {
-        $this->_pages[$page['id']] = $page;
+        $resolved_pages[$page['id']] = $page;
       }
+      return array_filter($resolved_pages, function($page) {
+        global $_mode;
+        return $_mode ||$page['published'];
+      });
     }
   }
 
   public function loadNav () {
-    $pages = $this->pages;
-    foreach ($pages as $id => $page) {
-
+    $ret = [];
+    foreach ($this->pages as $id => $page) {
       if ($page['parent_id'] == 0) {
-
-        $this->nav[$id] = $page;
+        $ret[$id] = $page;
       }
     }
+    return $ret;
   }
 
   public function loadVariables () {
     $variables = json_decode(NF::$capi->get('foundation/variables')->getBody(), true);
-
     if ($variables) {
+      $ret = [];
       foreach ($variables as $variable) {
-        $this->variables[$variable['alias']] = $variable['value'];
+        $ret[$variable['alias']] = $variable['value'];
       }
+      return $ret;
     }
+    return [];
   }
 
   public function loadTemplates () {
     try {
       $templates = json_decode(NF::$capi->get('foundation/templates')->getBody(), true);
 
+      $ret = [];
       foreach ($templates as $tmp) {
         if ($tmp['type'] == 'builder') {
-          $this->templates['components'][$tmp['id']] = $tmp;
+          $ret['components'][$tmp['id']] = $tmp;
         } else if ($tmp['type'] == 'block') {
-          $this->templates['blocks'][$tmp['id']] = $tmp;
+          $ret['blocks'][$tmp['id']] = $tmp;
         } else if ($tmp['type'] == 'page') {
-          $this->templates['pages'][$tmp['id']] = $tmp;
+          $ret['pages'][$tmp['id']] = $tmp;
         }
       }
+      return $ret;
     } catch (Exception $e) {
-      $this->templates = [];
+      return [];
     }
   }
 
   public function loadLabels () {
-    $this->labels = json_decode(NF::$capi->get('foundation/labels')->getBody(), true);
+    return json_decode(NF::$capi->get('foundation/labels')->getBody(), true);
   }
 
   public function loadStructures () {
     $structures = json_decode(NF::$capi->get('builder/structures/full')->getBody(), true);
 
+    $ret = [];
     foreach ($structures as $structure) {
       $fields = $structure['fields'];
       unset($structure['fields']);
-      $this->structures[$structure['id']] = $structure;
+      $ret[$structure['id']] = $structure;
 
       foreach ($fields as $field) {
         if ($field['type'] != 'collection') {
-          $this->structures[$structure['id']]['fields'][$field['alias']] = $field;
-          $this->structures[$structure['id']]['fields']['id_' . $field['id']] = $field;
+          $ret[$structure['id']]['fields'][$field['alias']] = $field;
+          $ret[$structure['id']]['fields']['id_' . $field['id']] = $field;
         }
       }
     }
+    return $ret;
   }
 }

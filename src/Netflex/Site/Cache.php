@@ -11,10 +11,10 @@ use Phpfastcache\Drivers\Memcached\Config as MemcachedConfig;
 class Cache
 {
 
-	private static $key;
-	private static $cache;
+  private static $key;
+  private static $cache;
 
-	public function __construct($key, $driver = 'files') {
+  public function __construct($key, $driver = 'files') {
 
     self::$key = $key;
 
@@ -42,11 +42,11 @@ class Cache
         throw new Exception('Invalid Cache driver');
     }
 
-		self::$cache = CacheManager::getInstance($driver, $config);
-	}
+    self::$cache = CacheManager::getInstance($driver, $config);
+  }
 
-	public function getCacheKey($key) {
-		return md5(self::$key . $key);
+  public function getCacheKey($key) {
+    return md5(self::$key . $key);
   }
 
   public function get ($key) {
@@ -66,7 +66,7 @@ class Cache
     return $this->save($key, $value, $ttl, null);
   }
 
-	public function fetch($key) {
+  public function fetch($key) {
     $item = self::$cache->getItem(self::getCacheKey($key));
     $item = unserialize($item->get());
     return $item;
@@ -99,31 +99,31 @@ class Cache
     $item = self::$cache->getItem(self::getCacheKey($key));
     $item->set($value)->expiresAfter($ttl);
     self::$cache->save($item);
-	}
+  }
 
-	public function saveMultiple(array $items) {
-		foreach($items as $item) {
-			$this->save($item['key'], $item['value'], $item['ttl'], $item['tag']);
-		}
-	}
+  public function saveMultiple(array $items) {
+    foreach($items as $item) {
+      $this->save($item['key'], $item['value'], $item['ttl'], $item['tag']);
+    }
+  }
 
   public function delete($key) {
     $key = self::getCacheKey($key);
     self::$cache->deleteItem($key);
   }
 
-	public function deleteMultiple(array $keys) {
-		foreach($keys as $key) {
-			$this->delete($key);
-		}
-	}
+  public function deleteMultiple(array $keys) {
+    foreach($keys as $key) {
+      $this->delete($key);
+    }
+  }
 
-	public function deleteTag($tag) {
-		self::$cache->deleteItemsByTags($tags);
-	}
+  public function deleteTag($tag) {
+    self::$cache->deleteItemsByTags($tags);
+  }
 
-	public function purge() {
-		self::$cache->clear();
-	}
+  public function purge() {
+    self::$cache->clear();
+  }
 
 }
