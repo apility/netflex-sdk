@@ -88,7 +88,7 @@ class NF
 
     self::$console = self::startPhpConsole();
     self::$site = new Site();
-
+    self::$jwt = new JWT(self::$site->variables['netflex_api']);
     // Datastore for Netflex
     self::$store = new Store();
 

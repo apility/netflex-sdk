@@ -72,7 +72,6 @@ class Site
       NF::$cache->save('structures', $this->structures, 3600);
     }
 
-    NF::$jwt = new JWT($this->variables['netflex_api']);
   }
 
   public function loadPage($id, $revision) {
