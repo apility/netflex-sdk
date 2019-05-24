@@ -450,7 +450,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
       if (array_key_exists('revision', $_GET) && array_key_exists('id', $_GET) && $r->id == $_GET['id']) {
         return $r->revisions[$_GET['revision']];
       } else {
-        return $r->revisions->last();
+        return $r;
       }
     } else {
       return new static($data);
