@@ -32,7 +32,7 @@ class Site
     */
     $name = strtolower($name);
     if($this->{"_" . $name} === NULL && method_exists($this, "load" . $name)) {
-      $this->{"_" . $name} = \NF::$cache->resolve($name, 1, function() use ($name) {
+      $this->{"_" . $name} = \NF::$cache->resolve(($name == "content" ? "page/" . $this->id : $name), 3600, function() use ($name) {
         return $this->{"load" . $name}();
       });
       return $this->{"_" . $name};
