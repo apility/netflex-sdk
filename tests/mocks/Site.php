@@ -7,6 +7,12 @@ class MockSite {
   /** @var array */
   public $labels = [];
 
+  /** @var array */
+  public $content = [];
+
+  /** @var array */
+  public $templates = [];
+
   public function mockVariable ($alias, $value) {
     $this->variables[$alias] = $value;
   }
