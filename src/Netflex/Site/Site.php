@@ -48,6 +48,15 @@ class Site
   public function loadGlobals () {    
   }
 
+  /**
+   * Legacy function
+   * 
+   * @deprecated
+   */
+  public function loadPage($id, $revision) {
+    \NF::$site = new self($id, $revision);
+  }
+
   public function loadContent() {
     if($this->id === NULL) {
       throw new Exception("Trying to load content on an anonymous site");
