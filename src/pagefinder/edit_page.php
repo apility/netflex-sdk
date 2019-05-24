@@ -19,7 +19,7 @@ NF::$site->loadGlobals();
 $page = get_page($page_id);
 $revision = $payload->revision_id ?? null;
 
-NF::$site->loadPage($page_id, $revision);
+NF::$site = new \Netflex\Site\Site($page_id, $revision);
 
 foreach ($payload->session as $key => $value) {
   $_SESSION[$key] = $value;

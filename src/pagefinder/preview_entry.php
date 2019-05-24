@@ -22,7 +22,7 @@ $previewmode = 1;
 NF::$site->loadGlobals();
 $structure = json_decode(NF::$capi->get('builder/structures/' . $entry['directory_id'])->getBody(), true);
 
-NF::$site->loadPage($structure['canonical_page_id'], NULL);
+NF::$site = new \Netflex\Site\Site($structure['canonical_page_id'], NULL);
 
 $entry = json_decode(NF::$capi->get('builder/structures/entry/' . $entry_id . '/revision/' . $entry_revision)->getBody(), true);;
 

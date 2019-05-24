@@ -17,7 +17,7 @@ require NF::nfPath('functions.php');
 require NF::nfPath('controller_page.php');
 
 if ($page_id) {
-  NF::$site->loadPage($page_id, $revision);
+  NF::$site = new \Netflex\Site\Site($page_id, $revision); 
   $site = NF::$site;
   require NF::nfPath('build_template.php');
   die();
