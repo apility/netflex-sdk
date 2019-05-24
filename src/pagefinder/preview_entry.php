@@ -15,12 +15,17 @@ $_mode = $payload->mode;
 $_domain = $payload->domain;
 $entry_id = $payload->entry_id;
 $entry_revision = $payload->revision_id;
+$entry = get_directory_entry($entry_id);
 $editmode = 0;
 $previewmode = 1;
 
 NF::$site->loadGlobals();
-$entry = json_decode(NF::$capi->get('builder/structures/entry/' . $entry_id . '/revision/' . $entry_revision)->getBody(), true);;
 $structure = json_decode(NF::$capi->get('builder/structures/' . $entry['directory_id'])->getBody(), true);
+
+NF::$site->loadPage($structure['canonical_page_id'], NULL);
+
+$entry = json_decode(NF::$capi->get('builder/structures/entry/' . $entry_id . '/revision/' . $entry_revision)->getBody(), true);;
+
 
 $page_id = $structure['canonical_page_id'];
 
