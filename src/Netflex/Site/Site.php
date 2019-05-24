@@ -6,7 +6,10 @@ use Exception;
 
 class Site
 {
-  public $content = NULL;
+  private $id = NULL;
+  private $revision = NULL;
+
+  public $_content = NULL;
   public $_templates = NULL;
   public $_labels = NULL;
   public $_pages = NULL;
@@ -15,15 +18,21 @@ class Site
   public $_nav = NULL;
   public $_variables = NULL;
 
+  public function __construct($id = NULL, $revision = NULL) {
+    $this->id = $id;
+    $this->revision = $revision;
+  }
   public function __get($name)
   {
+
+    nf::debug($name);
     /*
       Check if there is a _$name variable, if it is set and is null
       Then perform the 'load$name' function, which populates the variable and stores it for later
     */
     $name = strtolower($name);
     if($this->{"_" . $name} === NULL && method_exists($this, "load" . $name)) {
-      $this->{"_" . $name} = \NF::$cache->resolve($name, 3600, function() use ($name) {
+      $this->{"_" . $name} = \NF::$cache->resolve($name, 1, function() use ($name) {
         return $this->{"load" . $name}();
       });
       return $this->{"_" . $name};
@@ -39,20 +48,14 @@ class Site
   public function loadGlobals () {    
   }
 
-  public function loadPage($id, $revision) {
-    global $_mode;
-    $this->content = NF::$cache->fetch('page/' . $id);
-    if ($_mode || !$this->content) {
-      $this->loadContent($id, $revision);
-      NF::$cache->save('page/$id', $this->content, 3600);
+  public function loadContent() {
+    if($this->id === NULL) {
+      throw new Exception("Trying to load content on an anonymous site");
     }
-  }
-
-
-  public function loadContent($id, $revision) {
     try {
-      $contentItems = json_decode(NF::$capi->get('builder/pages/' . $id . '/content' . ($revision ? ('/' . $revision) : ''))->getBody(), true);
+      $contentItems = json_decode(NF::$capi->get('builder/pages/' . $this->id . '/content' . ($this->revision ? ('/' . $this->revision) : ''))->getBody(), true);
 
+      $ret = [];
       foreach ($contentItems as $item) {
 
         if (isset($this->content[$item['area']])) {
@@ -60,20 +63,22 @@ class Site
           if (!isset($this->content[$item['area']][0])) {
 
             $existing = $this->content[$item['area']];
-            $this->content[$item['area']] = null;
-            $this->content[$item['area']] = [];
-            $this->content[$item['area']][] = $existing;
+            $ret[$item['area']] = null;
+            $ret[$item['area']] = [];
+            $ret[$item['area']][] = $existing;
           }
 
-          $this->content[$item['area']][] = $item;
+          $ret[$item['area']][] = $item;
         } else {
-          $this->content[$item['area']] = $item;
+          $ret[$item['area']] = $item;
         }
 
-        $this->content['id_' . $item['id']] = $item;
+        $ret['id_' . $item['id']] = $item;
       }
+      return $ret;
+
     } catch (Exception $e) {
-      $this->content = [];
+      return [];
     }
   }
 
