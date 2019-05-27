@@ -12,7 +12,7 @@ jobs:
       - netflex/composer
       - run:
           name: PHPUnit
-          command: cd ~/project && ./vendor/bin/phpunit --bootstrap ./tests/bootstrap.php --testdox ./tests
+          command: cd ~/project && composer run-script test
 
 workflows:
   version: 2
