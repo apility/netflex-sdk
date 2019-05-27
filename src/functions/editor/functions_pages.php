@@ -186,7 +186,7 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
 
   return <<<HTML
     <picture
-      id="e-{$image['id']}-$column"
+      id="e-{$image['id']}-$column"
       class="$class find-image"
       data-content-area="$area"
       data-content-type="$column"
