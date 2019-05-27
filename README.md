@@ -26,6 +26,12 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(Netflex\SDK::bootstrap);
 ```
 
+## Running the test suite
+
+```bash
+composer run-script tests
+```
+
 <hr>
 
 Copyright &copy; 2019 **[Apility AS](https://apility.no)**
