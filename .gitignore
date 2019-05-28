@@ -4,3 +4,6 @@
 ### macOS ###
 
 .DS_Store
+
+### PHP Unit ###
+.phpunit.result.cache

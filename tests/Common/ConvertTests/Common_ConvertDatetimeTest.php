@@ -9,7 +9,7 @@ final class Common_ConvertDatetimeTest extends TestCase
    */
   protected function setUp(): void
   {
-    require_once(__DIR__ . '/../../../src/functions/common/functions_convert.php');
+    require_once('src/functions/common/functions_convert.php');
   }
 
   public function testHandlesNull(): void

@@ -46,7 +46,6 @@
     "spatie/phpunit-snapshot-assertions": "^2.1"
   },
   "scripts": {
-    "tests": "composer run-script test:common",
-    "test:common": "vendor/bin/phpunit --bootstrap ./tests/bootstrap.php --testdox ./tests/Common --color=always"
+    "tests": "vendor/bin/phpunit --testdox --colors=always"
   }
 }
