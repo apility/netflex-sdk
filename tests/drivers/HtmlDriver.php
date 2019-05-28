@@ -10,16 +10,13 @@ class HtmlDriver implements Driver
   public function serialize($data): string
   {
     $data = $data ?? '<div/>';
+
     if (!is_string($data)) {
       throw new CantBeSerialized('Only strings can be serialized to HTML');
     }
 
     $html = new HTML5DOMDocument();
-    libxml_use_internal_errors(true);
-    $html->preserveWhiteSpace = false;
-    $html->formatOutput = true;
-    @$html->loadHTML($data);
-
+    $html->loadHTML($data);
     return $html->saveHTML();
   }
 
@@ -30,6 +27,6 @@ class HtmlDriver implements Driver
 
   public function match($expected, $actual)
   {
-    Assert::assertEquals($expected, $this->serialize($actual));
+    Assert::assertEquals($this->serialize($expected), $this->serialize($actual));
   }
 }
