@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\Assert;
 use Spatie\Snapshots\Driver;
+use IvoPetkov\HTML5DOMDocument;
 use Spatie\Snapshots\Exceptions\CantBeSerialized;
 
 class HtmlDriver implements Driver
@@ -13,9 +14,11 @@ class HtmlDriver implements Driver
       throw new CantBeSerialized('Only strings can be serialized to HTML');
     }
 
-    $html = new DOMDocument();
-    $html->loadHTML($data);
+    $html = new HTML5DOMDocument();
+    libxml_use_internal_errors(true);
+    $html->preserveWhiteSpace = false;
     $html->formatOutput = true;
+    @$html->loadHTML($data);
 
     return $html->saveHTML();
   }
