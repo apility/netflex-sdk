@@ -9,7 +9,6 @@
  */
 function get_customer_data($username, $data = null)
 {
-  $username = convert_to_safe_string($username, 'text');
   $data = convert_to_safe_string($data, 'str');
 
   try {
