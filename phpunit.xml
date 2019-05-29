@@ -16,13 +16,13 @@
 >
   <testsuites>
     <testsuite name="Common Tests">
-      <directory>tests/Common</directory>
+      <directory suffix=".test.php">tests/TestSuites/Common</directory>
     </testsuite>
     <testsuite name="Live Tests">
-      <directory>tests/Live</directory>
+      <directory suffix=".test.php">tests/TestSuites/Live</directory>
     </testsuite>
     <testsuite name="Editor Tests">
-      <directory>tests/Editor</directory>
+      <directory suffix=".test.php">tests/TestSuites/Editor</directory>
     </testsuite>
   </testsuites>
 </phpunit>
