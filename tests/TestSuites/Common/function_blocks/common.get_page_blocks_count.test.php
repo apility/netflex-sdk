@@ -12,7 +12,7 @@ final class Common_GetPageBlocksCountTest extends TestCase
     require_once('src/functions/common/functions_blocks.php');
   }
 
-  public function testOutputsMatchesSnapshot(): void
+  public function testOutputsCorrectCount(): void
   {
     NF::$site->mockContent('sections', [
       ['id' => 1],
