@@ -90,7 +90,7 @@ function get_full_content_array($page_id)
 
   if (!$content) {
     $content = [];
-    $contentItems = json_decode(NF::$capi->get('builder/pages/' . $page_id . '/content')->getBody());
+    $contentItems = json_decode(NF::$capi->get('builder/pages/' . $page_id . '/content')->getBody(), true);
 
     foreach ($contentItems as $item) {
       if (isset($content[$item['area']])) {
