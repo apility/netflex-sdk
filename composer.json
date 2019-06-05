@@ -14,6 +14,24 @@
       "name": "Olav Øyen",
       "email": "olav@apility.no",
       "homepage": "https://github.com/olavoyen",
+      "role": "Author"
+    },
+    {
+      "name": "Thomas Alrek",
+      "email": "thomas@apility.no",
+      "homepage": "https://github.com/thomas-alrek",
+      "role": "Maintainer / Developer"
+    },
+    {
+      "name": "Cathrine Vaage",
+      "email": "cathrine@apility.no",
+      "homepage": "https://github.com/cathrinevaage",
+      "role": "Developer"
+    },
+    {
+      "name": "Tommy Stigen Olsen",
+      "email": "tommy@apility.no",
+      "homepage": "https://github.com/tommysolsen",
       "role": "Developer"
     }
   ],
