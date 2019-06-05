@@ -20,7 +20,10 @@ class StructureQuery
   private $_first = false;
   private $_paginate = false;
   private $_page = null;
+  private $_from = null;
   private $_size = null;
+  private $_currentPageSize = null;
+  private $_firstPageSize = null;
   private $_fieldsModified = false;
 
   public function __construct($directory, $class)
@@ -246,12 +249,26 @@ class StructureQuery
     return $this->field($fields);
   }
 
-  public function paginate($size, $page = 1)
+  public function paginate($size, $page = 1, $firstPageSize = null)
   {
     $this->_paginate = true;
-    $this->_page = ($page < 1 ? 1 : $page) - 1;
+
+    $this->_page = max($page, 1) - 1;
+
     $this->_size = $size;
-    $this->_search->paginate($this->_page, $this->_size);
+
+    $this->_firstPageSize = $firstPageSize ?? $this->_size;
+
+    $this->_currentPageSize = $this->_page === 0
+      ? $this->_firstPageSize
+      : $this->_size;
+
+
+    $this->_from = $this->_page === 0
+      ? 0
+      : $this->_firstPageSize + $this->_size * ($this->_page - 1);
+
+    $this->_search->paginate($this->_from, $this->_currentPageSize);
 
     return $this->get();
   }
@@ -303,6 +320,13 @@ class StructureQuery
       return $results->values();
     }
 
-    return new StructureQueryPage($results, $this->_page, $this->_size, $totalItems);
+    return new StructureQueryPage(
+      $results,
+      $this->_page,
+      $this->_size,
+      $this->_firstPageSize,
+      $this->_currentPageSize,
+      $totalItems
+    );
   }
 }
