@@ -2,8 +2,10 @@
 /vendor
 
 ### macOS ###
-
 .DS_Store
+
+### IDE ###
+.idea
 
 ### PHP Unit ###
 .phpunit.result.cache
