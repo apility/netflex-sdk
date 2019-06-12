@@ -15,6 +15,11 @@
   verbose="true"
 >
   <testsuites>
+    <testsuite name="CaptchaV2 Tests">
+      <directory suffix=".test.php">
+        tests/TestSuites/CaptchaV2
+      </directory>
+    </testsuite>
     <testsuite name="Common Tests">
       <directory suffix=".test.php">
         tests/TestSuites/Common
