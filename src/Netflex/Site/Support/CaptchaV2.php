@@ -62,12 +62,15 @@ class CaptchaV2
    */
   public static function isValid()
   {
-    if (array_key_exists('g-recaptcha-response', $_GET))
-      $response = $_GET['g-recaptcha-response'];
-    if (array_key_exists('g-recaptcha-response', $_POST))
-      $response = $_POST['g-recaptcha-response'];;
-    if (!isset($response))
+    $response = null;
+
+    if (array_key_exists('g-recaptcha-response', $_REQUEST)) {
+      $response = $_REQUEST['g-recaptcha-response'];
+    }
+
+    if (is_null($response)) {
       throw new ResponseMissingException('g-recaptcha-response is missing from $_GET and $_POST');
+    }
 
     $response = json_decode(NF::$capi->post('https://www.google.com/recaptcha/api/siteverify', [
       'form_params' => [

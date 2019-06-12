@@ -24,7 +24,7 @@ final class CaptchaV2_IsValidTest extends TestCase
   }
 
   public function testHandlesRequestException (): void {
-    $_GET['g-recaptcha-response'] = 'test';
+    $_REQUEST['g-recaptcha-response'] = 'test';
     NF::$capi->mockResponse(new Response(500));
     NF::$site->mockVariable('captcha_site_key', 'aabbccddeeff');
     NF::$site->mockVariable('captcha_site_secret', '112233445566');
@@ -33,7 +33,7 @@ final class CaptchaV2_IsValidTest extends TestCase
   }
 
   public function testHandlesValidCase (): void {
-    $_GET['g-recaptcha-response'] = 'test';
+    $_REQUEST['g-recaptcha-response'] = 'test';
     NF::$site->mockVariable('captcha_site_key', 'aabbccddeeff');
     NF::$site->mockVariable('captcha_site_secret', '112233445566');
     NF::$capi->mockResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode([
@@ -48,7 +48,7 @@ final class CaptchaV2_IsValidTest extends TestCase
   }
 
   public function testHandlesInvalidCase (): void {
-    $_GET['g-recaptcha-response'] = 'test';
+    $_REQUEST['g-recaptcha-response'] = 'test';
     NF::$site->mockVariable('captcha_site_key', 'aabbccddeeff');
     NF::$site->mockVariable('captcha_site_secret', '112233445566');
     NF::$capi->mockResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode([
