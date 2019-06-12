@@ -15,7 +15,9 @@ function get_directory_entry($id)
 
   if ($entrydata == null) {
     $url = 'builder/structures/entry/' . $id;
-    $url .= $revision_override ? ('/revision/' . $revision_override) : '';
+    if (isset($entry_override) && $entry_override == $id && isset($revision_override)) {
+      $url .= '/revision/' . $revision_override;
+    }
 
     try {
       $entrydata = json_decode(NF::$capi->get($url)->getBody(), true);
