@@ -4,7 +4,7 @@
  * Get entry data
  *
  * @param int $id
- * @return array
+ * @return array|null
  */
 function get_directory_entry($id)
 {
@@ -54,7 +54,9 @@ function get_directory_entry($id)
     NF::debug($entrydata, 'entry ' . $id . ' from memory');
   }
 
-  return $entrydata;
+  if ($entrydata && ($entrydata['published']) || $revision_override) {
+    return $entrydata;
+  }
 }
 
 /**
@@ -235,8 +237,10 @@ function get_entry_content_list($entry_id, $area, $content_type)
   $data = $entry[$area];
   $contentList = [];
 
-  foreach ($data as $item) {
-    $contentList[] = $item[$content_type];
+  if ($entry) {
+    foreach ($data as $item) {
+      $contentList[] = $item[$content_type];
+    }
   }
 
   return $contentList;
