@@ -79,7 +79,7 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  * @param string $fill = '255,255,255'
  * @return string
  */
-function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0')
+function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null, $resolutions = [])
 {
   if ($compression == 'o') {
     $dimensions = '';
@@ -97,7 +97,7 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
     $src = $domain . $url;
 
     return <<<HTML
-    <picture>
+    <picture class="$picture_class">
       <source srcset="$src?src=320w" media="(max-width: 320px)">
       <source srcset="$src?src=480w" media="(max-width: 480px)">
       <source srcset="$src?src=768w" media="(max-width: 768px)">

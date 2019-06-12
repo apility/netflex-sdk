@@ -279,6 +279,8 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
 
   public static function find($id)
   {
+    global $entry_override;
+    global $revision_override;
 
     if (is_null($id)) {
       return null;
@@ -301,19 +303,23 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
       $data = null;
       $cacheKey = 'entry/' . $id;
 
-      if (NF::$cache->has($cacheKey)) {
+      if (NF::$cache->has($cacheKey) && !isset($entry_override)) {
         $data = NF::$cache->fetch($cacheKey);
       }
 
       if (!$data) {
-        $response = NF::$capi->get('builder/structures/entry/' . $id);
+        $url = 'builder/structures/entry/' . $id;
+        if (isset($entry_override) && $entry_override == $id && isset($revision_override)) {
+          $url .= '/revision/' . $revision_override;
+        }
+        $response = NF::$capi->get($url);
         $data = json_decode($response->getBody(), true);
 
         if (!$data || $data['directory_id'] != $structureId) {
           $data = null;
         }
 
-        if ($data) {
+        if ($data && !isset($entry_override)) {
           NF::$cache->save($cacheKey, $data);
         }
       }

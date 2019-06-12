@@ -8,6 +8,7 @@ global $edit_tools;
 global $_mode;
 global $_domain;
 global $url_asset;
+global $entry_override;
 global $revision_override;
 global $previewmode;
 
@@ -24,8 +25,8 @@ $structure = json_decode(NF::$capi->get('builder/structures/' . $entry['director
 
 NF::$site = new \Netflex\Site\Site($structure['canonical_page_id'], NULL);
 
-$entry = json_decode(NF::$capi->get('builder/structures/entry/' . $entry_id . '/revision/' . $entry_revision)->getBody(), true);;
 
+$entry = json_decode(NF::$capi->get('builder/structures/entry/' . $entry_id . '/revision/' . $entry_revision)->getBody(), true);
 
 $page_id = $structure['canonical_page_id'];
 
@@ -62,6 +63,7 @@ switch (trim($structure['url_scheme'], '/')) {
     die('Invalid url_scheme');
 }
 
+$entry_override = $payload->entry_id;
 $revision_override = $entry_revision;
 
 NF::$site->loadGlobals();

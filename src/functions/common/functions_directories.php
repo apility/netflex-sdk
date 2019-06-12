@@ -4,18 +4,21 @@
  * Get entry data
  *
  * @param int $id
- * @return array
+ * @return array|null
  */
 function get_directory_entry($id)
 {
+  global $entry_override;
   global $revision_override;
 
   $id = convert_to_safe_string($id, 'int');
-  $entrydata = $revision_override ? null : NF::$cache->fetch("entry/$id");
+  $entrydata = (isset($entry_override) && $entry_override == $id && isset($revision_override)) ? null : NF::$cache->fetch("entry/$id");
 
   if ($entrydata == null) {
     $url = 'builder/structures/entry/' . $id;
-    $url .= $revision_override ? ('/revision/' . $revision_override) : '';
+    if (isset($entry_override) && $entry_override == $id && isset($revision_override)) {
+      $url .= '/revision/' . $revision_override;
+    }
 
     try {
       $entrydata = json_decode(NF::$capi->get($url)->getBody(), true);
@@ -54,7 +57,9 @@ function get_directory_entry($id)
     NF::debug($entrydata, 'entry ' . $id . ' from memory');
   }
 
-  return $entrydata;
+  if ($entrydata && ($entrydata['published']) || ($entry_override == $id && isset($revision_override))) {
+    return $entrydata;
+  }
 }
 
 /**
@@ -235,8 +240,10 @@ function get_entry_content_list($entry_id, $area, $content_type)
   $data = $entry[$area];
   $contentList = [];
 
-  foreach ($data as $item) {
-    $contentList[] = $item[$content_type];
+  if ($entry) {
+    foreach ($data as $item) {
+      $contentList[] = $item[$content_type];
+    }
   }
 
   return $contentList;
