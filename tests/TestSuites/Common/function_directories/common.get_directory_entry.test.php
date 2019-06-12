@@ -52,6 +52,7 @@ final class Common_GetDirectoryEntryTest extends TestCase
   public function testCanOverrideRevision (): void
   {
     global $revision_override;
+    global $entry_override;
 
     NF::$cache->mockItem('entry/10003', [
       'id' => 10003,
@@ -69,9 +70,32 @@ final class Common_GetDirectoryEntryTest extends TestCase
       'published' => false
     ])));
 
+    $entry_override = 10003;
     $revision_override = 10001;
 
     $this->assertMatchesJsonSnapshot(get_directory_entry(10003));
+
+    NF::$cache->mockItem('entry/10098', [
+      'id' => 10098,
+      'name' => 'Test 3',
+      'url' => 'test-3/',
+      'revision' => 10002,
+      'published' => true
+    ]);
+
+    NF::$capi->mockResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+      'id' => 10099,
+      'name' => 'Test 3',
+      'url' => 'test-3/',
+      'revision' => 10003,
+      'published' => false
+    ])));
+
+    $entry_override = 10099;
+    $revision_override = 10003;
+
+    $this->assertMatchesJsonSnapshot(get_directory_entry(10099));
+    $this->assertMatchesJsonSnapshot(get_directory_entry(10098));
   }
 
   public function testRespectsPublishedAttribute (): void

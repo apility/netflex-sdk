@@ -8,10 +8,11 @@
  */
 function get_directory_entry($id)
 {
+  global $entry_override;
   global $revision_override;
 
   $id = convert_to_safe_string($id, 'int');
-  $entrydata = $revision_override ? null : NF::$cache->fetch("entry/$id");
+  $entrydata = (isset($entry_override) && $entry_override == $id && isset($revision_override)) ? null : NF::$cache->fetch("entry/$id");
 
   if ($entrydata == null) {
     $url = 'builder/structures/entry/' . $id;
@@ -56,7 +57,7 @@ function get_directory_entry($id)
     NF::debug($entrydata, 'entry ' . $id . ' from memory');
   }
 
-  if ($entrydata && ($entrydata['published']) || $revision_override) {
+  if ($entrydata && ($entrydata['published']) || ($entry_override == $id && isset($revision_override))) {
     return $entrydata;
   }
 }
