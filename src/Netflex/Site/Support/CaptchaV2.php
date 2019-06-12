@@ -2,6 +2,7 @@
 
 namespace Netflex\Site\Support;
 
+use NF;
 use Netflex\Site\Support\ResponseMissingException;
 use Netflex\Site\Support\GoogleResponseException;
 use Netflex\Site\Support\ConfigurationMissingException;
@@ -22,10 +23,10 @@ class CaptchaV2
   {
     $siteKey = get_setting('captcha_site_key');
     if ($siteKey === null)
-      throw new ConfigurationMissingException("captcha_site_key setting is missing");
+      throw new ConfigurationMissingException('captcha_site_key setting is missing');
     $siteSecret = get_setting('captcha_site_secret');
     if ($siteSecret === null)
-      throw new ConfigurationMissingException("captcha_site_key setting is missing");
+      throw new ConfigurationMissingException('captcha_site_key setting is missing');
 
     return (object)[
       'siteKey'     => $siteKey,
@@ -37,7 +38,7 @@ class CaptchaV2
    * Returns the script tag that has to be included for the captcha to work
    * @return string Script tag
    */
-  public static function scriptTag($override=NULL)
+  public static function scriptTag($override = null)
   {
     return ($override ?? static::$printTag) ? '<script src="https://www.google.com/recaptcha/api.js"></script>' : '';
   }
@@ -68,7 +69,7 @@ class CaptchaV2
     if (!isset($response))
       throw new ResponseMissingException('g-recaptcha-response is missing from $_GET and $_POST');
 
-    $response = json_decode(\NF::$capi->post('https://www.google.com/recaptcha/api/siteverify', [
+    $response = json_decode(NF::$capi->post('https://www.google.com/recaptcha/api/siteverify', [
       'form_params' => [
         'secret'    => static::getCredentials()->siteSecret,
         'response'  => $response,
@@ -76,8 +77,8 @@ class CaptchaV2
       ]
     ])->getBody());
 
-    if (isset($response->{"error-codes"})) {
-      throw new GoogleResponseException($response->{"error-codes"}[0]);
+    if (isset($response->{'error-codes'})) {
+      throw new GoogleResponseException($response->{'error-codes'}[0]);
     }
     return $response->success;
   }
