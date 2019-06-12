@@ -308,7 +308,11 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
       }
 
       if (!$data) {
-        $response = NF::$capi->get('builder/structures/entry/' . $id . (isset($entry_override) ? "/revision/$revision_override" : ""));
+        $url = 'builder/structures/entry/' . $id;
+        if (isset($entry_override) && $entry_override == $id && isset($revision_override)) {
+          $url .= '/revision/' . $revision_override;
+        }
+        $response = NF::$capi->get($url);
         $data = json_decode($response->getBody(), true);
 
         if (!$data || $data['directory_id'] != $structureId) {
