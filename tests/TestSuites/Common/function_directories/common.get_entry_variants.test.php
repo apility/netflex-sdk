@@ -19,6 +19,7 @@ final class Common_GetEntryVariants extends TestCase
   public function testGetEntryVariants (): void
   {
     NF::$cache->mockItem('entry/10000', [
+      'published' => true,
       'variants' => [
         ['variant1'],
         ['variant2']
