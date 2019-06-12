@@ -37,7 +37,7 @@ class CaptchaV2
    * Returns the script tag that has to be included for the captcha to work
    * @return string Script tag
    */
-  public static function scriptTag($override=false)
+  public static function scriptTag($override=NULL)
   {
     return ($override ?? static::$printTag) ? '<script src="https://www.google.com/recaptcha/api.js"></script>' : '';
   }
