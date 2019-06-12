@@ -73,5 +73,18 @@ final class Common_GetDirectoryEntryTest extends TestCase
 
     $this->assertMatchesJsonSnapshot(get_directory_entry(10003));
   }
+
+  public function testRespectsPublishedAttribute (): void
+  {
+    NF::$capi->mockResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+      'id' => 10004,
+      'name' => 'Test 4',
+      'url' => 'test-4/',
+      'revision' => 10000,
+      'published' => false
+    ])));
+
+    $this->assertNull(get_directory_entry(10004));
+  }
 }
 

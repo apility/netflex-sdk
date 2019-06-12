@@ -19,6 +19,7 @@ final class Common_GetEntryContentListTest extends TestCase
   public function testGetEntryContentList (): void
   {
     NF::$cache->mockItem('entry/10000', [
+      'published' => true,
       'gallery' => [
         ['image' => 'image-1.png'],
         ['image' => 'image-2.png'],
