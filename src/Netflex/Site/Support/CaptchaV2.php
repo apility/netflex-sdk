@@ -13,7 +13,7 @@ use Netflex\Site\Support\ConfigurationMissingException;
  */
 class CaptchaV2
 {
-
+  private static $printTag = false;
   /**
    * Gets the contents of the captcha config
    * @return Object Captcha Config
@@ -37,9 +37,9 @@ class CaptchaV2
    * Returns the script tag that has to be included for the captcha to work
    * @return string Script tag
    */
-  public static function scriptTag()
+  public static function scriptTag($override=NULL)
   {
-    return '<script src="https://www.google.com/recaptcha/api.js"></script>';
+    return ($override ?? static::$printTag) ? '<script src="https://www.google.com/recaptcha/api.js"></script>' : '';
   }
 
   /**
@@ -48,6 +48,7 @@ class CaptchaV2
    */
   public static function checkBox()
   {
+    static::$printTag = true;
     return '<div class="g-recaptcha" data-sitekey="' . static::getCredentials()->siteKey . '"></div>';
   }
 
