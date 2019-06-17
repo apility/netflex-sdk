@@ -110,4 +110,33 @@ class Cache
 		self::$cache->clear();
 	}
 
+   /**
+   * One line fetch or set cache function
+   *
+   * @param $key string Name of the cache key
+   * @param $ttl int Cache time to live
+   * @param $callback function A function that resolves the value if it is not already cached
+   */
+
+  public static function resolve($key, $ttl = 3600, $callback) {
+    if(self::$cache->has($key)) {
+      return self::$cache->get($key);
+    } else {
+      $ttlValue = NULL;
+      $ttlFunction = function(int $value) use (&$ttlValue) {
+        $ttlValue = $value;
+      };
+      $args = (new \ReflectionFunction($callback))->getNumberOfParameters();
+      if($args == 1) {
+        $response = $callback($ttlFunction);
+        $ttlValue = is_int($ttlValue) ? max(1, $ttlValue) : NULL;
+        nf::debug($ttlValue, "Cache->resolve($key) dynamic duration");
+      } else {
+        $response = $callback();
+      }
+      self::$cache->set($key, $response, "_", $ttlValue ?? $ttl);
+      return self::$cache->get($key);
+    }
+  }
+}
 }
