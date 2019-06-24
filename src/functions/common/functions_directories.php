@@ -22,6 +22,10 @@ function get_directory_entry($id)
 
     try {
       $entrydata = json_decode(NF::$capi->get($url)->getBody(), true);
+      if (isset($entry_override) && $entry_override == $id && isset($revision_override)) {
+        $entrydata['published'] = '1';
+        $entrydata['use_time'] = '0';
+      }
     } catch (Exception $e) {
       return null;
     }
