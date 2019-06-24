@@ -21,7 +21,7 @@ $editmode = 0;
 $previewmode = 1;
 
 NF::$site->loadGlobals();
-$structure = json_decode(NF::$capi->get('builder/structures/' . $entry['directory_id'])->getBody(), true);
+$structure = json_decode(NF::$capi->get('builder/structures/' . $entry['directory_id'] . '/basic')->getBody(), true);
 
 NF::$site->loadPage($structure['canonical_page_id'], NULL);
 
