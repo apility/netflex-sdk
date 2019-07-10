@@ -6,7 +6,7 @@ if (isset($_SESSION['dev_domain']) && getenv('ENV') !== 'master') {
 } else if (isset(NF::$config['domains']['dev_domain']) && getenv('ENV') !== 'master') {
   $routing_domain = NF::$config['domains']['dev_domain'];
 } else {
-  $routing_domain = convert_to_safe_string($_SERVER['HTTP_HOST'], 'str');
+  $routing_domain = explode(':', $_SERVER['HTTP_HOST'])[0];
 }
 
 NF::debug('Domain', $routing_domain);
