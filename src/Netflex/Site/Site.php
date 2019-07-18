@@ -91,23 +91,24 @@ class Site
       $contentItems = json_decode(NF::$capi->get('builder/pages/' . $id . '/content' . ($revision ? ('/' . $revision) : ''))->getBody(), true);
 
       foreach ($contentItems as $item) {
+        if ($item['published'] === '1') {
+          if (isset($this->content[$item['area']])) {
 
-        if (isset($this->content[$item['area']])) {
+            if (!isset($this->content[$item['area']][0])) {
 
-          if (!isset($this->content[$item['area']][0])) {
+              $existing = $this->content[$item['area']];
+              $this->content[$item['area']] = null;
+              $this->content[$item['area']] = [];
+              $this->content[$item['area']][] = $existing;
+            }
 
-            $existing = $this->content[$item['area']];
-            $this->content[$item['area']] = null;
-            $this->content[$item['area']] = [];
-            $this->content[$item['area']][] = $existing;
+            $this->content[$item['area']][] = $item;
+          } else {
+            $this->content[$item['area']] = $item;
           }
 
-          $this->content[$item['area']][] = $item;
-        } else {
-          $this->content[$item['area']] = $item;
+          $this->content['id_' . $item['id']] = $item;
         }
-
-        $this->content['id_' . $item['id']] = $item;
       }
     } catch (Exception $e) {
       $this->content = [];
