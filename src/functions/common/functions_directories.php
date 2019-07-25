@@ -54,7 +54,7 @@ function get_directory_entry($id)
         return $entrydata;
       }
 
-      NF::$cache->save("entry/$id", $entrydata, 3600);
+      NF::$cache->save("entry/$id", $entrydata);
       NF::debug($entrydata, 'entry ' . $id . ' cached');
     }
   } else {
@@ -199,7 +199,7 @@ function get_full_directory($directory_id, $order = [])
       }
     }
     $data = MultiSort($output, $order);
-    NF::$cache->save("structure/$directory_id/entries", $data, 3600);
+    NF::$cache->save("structure/$directory_id/entries", $data);
   }
 
   return $data;
