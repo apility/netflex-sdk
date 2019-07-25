@@ -147,7 +147,7 @@ echo '
       }
 
       //Cache the sitemap
-      NF::$cache->save("sitemap", $sitemap, 3600);
+      NF::$cache->save("sitemap", $sitemap);
     }
 
     foreach ($sitemap as $item) { ?>
