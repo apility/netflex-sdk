@@ -137,8 +137,8 @@ class Cache
    */
   public function save($key, $value, $ttl = null, $tag = null)
   {
-    $min_ttl = get_setting('cache_min_ttl') ?? 3500;
-    $max_ttl = get_setting('cache_max_ttl') ?? 3800;
+    $min_ttl = 3500;
+    $max_ttl = 3800;
 
     if (is_null($ttl) || ($ttl > $min_ttl && $ttl < $max_ttl)) {
       $ttl = rand($min_ttl, $max_ttl);
@@ -147,8 +147,6 @@ class Cache
     $value = serialize($value);
     $item = self::$cache->getItem(self::getCacheKey($key));
     $item->set($value)->expiresAfter($ttl);
-    get_setting('cache_min_ttl');
-    get_setting('cache_max_ttl');
     return self::$cache->save($item);
   }
 
