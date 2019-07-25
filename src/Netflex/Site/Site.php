@@ -60,7 +60,6 @@ class Site
       NF::$cache->save('templates', $this->templates);
     }
 
-
     $this->loadLabels();
 
     $this->structures = NF::$cache->fetch('structures');

@@ -114,7 +114,7 @@ function get_full_content_array($page_id)
       $content['id_' . $item['id']] = $item;
     }
 
-    NF::$cache->save('page/' . $page_id, $content, 3600);
+    NF::$cache->save('page/' . $page_id, $content);
   }
 
   return $content;
