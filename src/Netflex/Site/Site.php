@@ -60,11 +60,7 @@ class Site
       NF::$cache->save('templates', $this->templates);
     }
 
-    $this->labels = NF::$cache->fetch('labels');
-    if ($this->labels == null) {
-      $this->loadLabels();
-      NF::$cache->save('labels', $this->labels);
-    }
+    $this->loadLabels();
 
     $this->structures = NF::$cache->fetch('structures');
     if ($this->structures == null) {
@@ -180,7 +176,14 @@ class Site
   }
 
   public function loadLabels () {
-    $this->labels = json_decode(NF::$capi->get('foundation/labels')->getBody(), true);
+    $labels = NF::$cache->fetch('labels');
+
+    if (!is_array($labels)) {
+      $labels = json_decode(NF::$capi->get('foundation/labels')->getBody(), true);
+      NF::$cache->save('labels', $labels);
+    }
+
+    $this->labels = $labels;
   }
 
   public function loadStructures () {

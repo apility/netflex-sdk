@@ -36,8 +36,8 @@ function get_current_url()
  */
 function get_redirect($url, $data)
 {
-  $redirects = NF::$cache->fetch("redirects");
-  if ($redirects == null) {
+  $redirects = NF::$cache->fetch('redirects');
+  if (!is_array($redirects)) {
     $redirects = json_decode(NF::$capi->get('foundation/redirects')->getBody(), true);
     NF::$cache->save("redirects", $redirects);
   }
