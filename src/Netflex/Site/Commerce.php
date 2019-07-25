@@ -45,7 +45,7 @@ class Commerce
       if ($order == null) {
         $request = NF::$capi->get('commerce/orders/secret/' . $secret);
         $order = json_decode($request->getBody(), true);
-        NF::$cache->save("order/$secret", $order, 3600);
+        NF::$cache->save("order/$secret", $order);
       }
       return $order;
     } else {
@@ -61,7 +61,7 @@ class Commerce
     if ($order == null) {
       $request = NF::$capi->get('commerce/orders/' . $id);
       $order = json_decode($request->getBody(), true);
-      NF::$cache->save("order/$id", $order, 3600);
+      NF::$cache->save("order/$id", $order);
     }
 
     return $order;
