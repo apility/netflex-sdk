@@ -9,7 +9,7 @@ use Netflex\Site\Util;
 use Netflex\Site\Commerce;
 use Netflex\Site\Search;
 use Netflex\Site\JWT;
-use PhpConsole\Handler;
+use Netflex\Site\Console;
 
 class NF
 {
@@ -35,7 +35,10 @@ class NF
   public static $config;
   /** @var array[string]string */
   public static $routes;
-  /** @var Handler */
+  /**
+   * @deprecated 1.0.11
+   * @var Console
+   * */
   public static $console;
   /** @var string */
   public static $sitename;
@@ -83,7 +86,7 @@ class NF
       self::clearCache();
     }
 
-    self::$console = self::startPhpConsole();
+    self::$console = Console::getInstance();
     self::$site = new Site();
 
     // Datastore for Netflex
@@ -165,17 +168,13 @@ class NF
   /**
    * Instantiates a PHPConsole session
    *
-   * @return PhpConsole
+   * @deprecated 1.0.11
+   * @return Console
    */
   public static function startPhpConsole()
   {
-    $console = null;
-    if (getenv('ENV') !== 'master') {
-      $console = Handler::getInstance();
-      $console->getConnector()->setSourcesBasePath($_SERVER['DOCUMENT_ROOT']);
-      $console->start();
-    }
-    return $console;
+    trigger_error('NF::startPhpConsole is deprecated', E_USER_DEPRECATED);
+    return new Console();
   }
 
   /**
@@ -186,9 +185,8 @@ class NF
    */
   public static function debug($text, $label = null)
   {
-    if (self::$console) {
-      self::$console->debug($text, $label);
-    }
+    $console = Console::getInstance();
+    $console->log($text, $label);
   }
 
   /**

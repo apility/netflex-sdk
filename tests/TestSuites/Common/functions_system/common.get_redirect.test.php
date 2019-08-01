@@ -33,6 +33,8 @@ final class Common_GetRedirectTest extends TestCase
       get_redirect('test', 'target_url')
     );
 
+    NF::$cache->clear();
+
     NF::$capi->mockResponse(new Response(200, ['Content-Type' => 'application/json'], $redirects));
     $this->assertEquals(
       'test_value',

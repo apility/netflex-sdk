@@ -17,7 +17,7 @@ if ($navData == null) {
     $navData['parents'][$pg['parent_id']][] = $pg['id'];
   }
 
-  NF::$cache->save("navdata", $navData, 3600);
+  NF::$cache->save("navdata", $navData);
 }
 
 /**

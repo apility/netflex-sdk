@@ -16,4 +16,8 @@ class MockCache {
   public function save ($key, $value, $ttl = 0) {
     $this->items[$key] = $value;
   }
+
+  public function clear () {
+    $this->items = [];
+  }
 }

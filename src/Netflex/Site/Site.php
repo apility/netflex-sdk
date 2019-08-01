@@ -21,7 +21,7 @@ class Site
     $this->_pages = NF::$cache->fetch('pages');
     if (!$this->_pages) {
       $this->loadPages();
-      NF::$cache->save('pages', $this->_pages, 3600);
+      NF::$cache->save('pages', $this->_pages);
     }
 
     $this->pages = [];
@@ -39,37 +39,33 @@ class Site
     $this->nav = NF::$cache->fetch('nav');
     if ($this->nav == null) {
       $this->loadNav();
-      NF::$cache->save('nav', $this->nav, 3600);
+      NF::$cache->save('nav', $this->nav);
     }
 
     $this->variables = NF::$cache->fetch('variables');
     if ($this->variables == null) {
       $this->loadVariables();
-      NF::$cache->save('variables', $this->variables, 3600);
+      NF::$cache->save('variables', $this->variables);
     }
 
     $this->statics = NF::$cache->fetch('statics');
     if ($this->statics == null) {
       $this->loadStatics();
-      NF::$cache->save('statics', $this->statics, 3600);
+      NF::$cache->save('statics', $this->statics);
     }
 
     $this->templates = NF::$cache->fetch('templates');
     if ($this->templates == null) {
       $this->loadTemplates();
-      NF::$cache->save('templates', $this->templates, 3600);
+      NF::$cache->save('templates', $this->templates);
     }
 
-    $this->labels = NF::$cache->fetch('labels');
-    if ($this->labels == null) {
-      $this->loadLabels();
-      NF::$cache->save('labels', $this->labels, 3600);
-    }
+    $this->loadLabels();
 
     $this->structures = NF::$cache->fetch('structures');
     if ($this->structures == null) {
       $this->loadStructures();
-      NF::$cache->save('structures', $this->structures, 3600);
+      NF::$cache->save('structures', $this->structures);
     }
 
     NF::$jwt = new JWT($this->variables['netflex_api']);
@@ -81,7 +77,7 @@ class Site
     $this->content = NF::$cache->fetch('page/' . $id);
     if ($_mode || !$this->content) {
       $this->loadContent($id, $revision);
-      NF::$cache->save('page/$id', $this->content, 3600);
+      NF::$cache->save('page/$id', $this->content);
     }
   }
 
@@ -91,23 +87,24 @@ class Site
       $contentItems = json_decode(NF::$capi->get('builder/pages/' . $id . '/content' . ($revision ? ('/' . $revision) : ''))->getBody(), true);
 
       foreach ($contentItems as $item) {
+        if ($item['published'] === '1') {
+          if (isset($this->content[$item['area']])) {
 
-        if (isset($this->content[$item['area']])) {
+            if (!isset($this->content[$item['area']][0])) {
 
-          if (!isset($this->content[$item['area']][0])) {
+              $existing = $this->content[$item['area']];
+              $this->content[$item['area']] = null;
+              $this->content[$item['area']] = [];
+              $this->content[$item['area']][] = $existing;
+            }
 
-            $existing = $this->content[$item['area']];
-            $this->content[$item['area']] = null;
-            $this->content[$item['area']] = [];
-            $this->content[$item['area']][] = $existing;
+            $this->content[$item['area']][] = $item;
+          } else {
+            $this->content[$item['area']] = $item;
           }
 
-          $this->content[$item['area']][] = $item;
-        } else {
-          $this->content[$item['area']] = $item;
+          $this->content['id_' . $item['id']] = $item;
         }
-
-        $this->content['id_' . $item['id']] = $item;
       }
     } catch (Exception $e) {
       $this->content = [];
@@ -179,7 +176,14 @@ class Site
   }
 
   public function loadLabels () {
-    $this->labels = json_decode(NF::$capi->get('foundation/labels')->getBody(), true);
+    $labels = NF::$cache->fetch('labels');
+
+    if (!is_array($labels)) {
+      $labels = json_decode(NF::$capi->get('foundation/labels')->getBody(), true);
+      NF::$cache->save('labels', $labels);
+    }
+
+    $this->labels = $labels;
   }
 
   public function loadStructures () {

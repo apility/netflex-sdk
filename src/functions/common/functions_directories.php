@@ -22,6 +22,10 @@ function get_directory_entry($id)
 
     try {
       $entrydata = json_decode(NF::$capi->get($url)->getBody(), true);
+      if (isset($entry_override) && $entry_override == $id && isset($revision_override)) {
+        $entrydata['published'] = '1';
+        $entrydata['use_time'] = '0';
+      }
     } catch (Exception $e) {
       return null;
     }
@@ -50,7 +54,7 @@ function get_directory_entry($id)
         return $entrydata;
       }
 
-      NF::$cache->save("entry/$id", $entrydata, 3600);
+      NF::$cache->save("entry/$id", $entrydata);
       NF::debug($entrydata, 'entry ' . $id . ' cached');
     }
   } else {
@@ -195,7 +199,7 @@ function get_full_directory($directory_id, $order = [])
       }
     }
     $data = MultiSort($output, $order);
-    NF::$cache->save("structure/$directory_id/entries", $data, 3600);
+    NF::$cache->save("structure/$directory_id/entries", $data);
   }
 
   return $data;

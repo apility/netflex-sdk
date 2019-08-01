@@ -90,7 +90,7 @@ function get_customer($id)
     if ($data == null) {
       $request = NF::$capi->get('relations/customers/customer/' . $id);
       $data = json_decode($request->getBody(), true);
-      NF::$cache->save('customer/' . $id, $data, 3600);
+      NF::$cache->save('customer/' . $id, $data);
     }
     return $data;
   }

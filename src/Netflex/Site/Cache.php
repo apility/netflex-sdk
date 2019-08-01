@@ -1,4 +1,5 @@
 <?php
+
 namespace Netflex\Site;
 
 use NF;
@@ -11,13 +12,17 @@ use Phpfastcache\Drivers\Memcached\Config as MemcachedConfig;
 
 class Cache
 {
+  /** @var int */
+  const TTL = 3600;
+
   /** @var string */
   private static $key;
 
   /** @var \Phpfastcache\Core\Pool\ExtendedCacheItemPoolInterface */
-	private static $cache;
+  private static $cache;
 
-	public function __construct() {
+  public function __construct()
+  {
     self::$key = NF::$sitename;
 
     $config = null;
@@ -36,7 +41,7 @@ class Cache
         break;
       case 'files':
         if (!file_exists(NF::$cacheDir . 'cache/')) {
-          mkdir(NF::$cacheDir. 'cache/', 0755, true);
+          mkdir(NF::$cacheDir . 'cache/', 0755, true);
         }
 
         $config = new FilesConfig([
@@ -48,8 +53,8 @@ class Cache
         throw new Exception('Invalid Cache driver');
     }
 
-		self::$cache = CacheManager::getInstance($driver, $config);
-	}
+    self::$cache = CacheManager::getInstance($driver, $config);
+  }
 
   /**
    * Creates a prefixed cache key
@@ -57,8 +62,9 @@ class Cache
    * @param string $key
    * @return string
    */
-	public function getCacheKey($key) {
-		return md5(self::$key . $key);
+  public function getCacheKey($key)
+  {
+    return md5(self::$key . $key);
   }
 
   /**
@@ -68,7 +74,8 @@ class Cache
    * @param string $key
    * @return mixed
    */
-  public function get ($key) {
+  public function get($key)
+  {
     return $this->fetch($key);
   }
 
@@ -78,7 +85,8 @@ class Cache
    * @see save
    * @return bool
    */
-  public function set($key, $value, $_=false, $ttl) {
+  public function set($key, $value, $_ = false, $ttl)
+  {
     return $this->save($key, $value, $ttl, null);
   }
 
@@ -88,7 +96,8 @@ class Cache
    * @see save
    * @return bool
    */
-  public function add ($key, $value, $_ = false, $ttl) {
+  public function add($key, $value, $_ = false, $ttl)
+  {
     return $this->save($key, $value, $ttl, null);
   }
 
@@ -98,7 +107,8 @@ class Cache
    * @param string $key
    * @return mixed
    */
-	public function fetch($key) {
+  public function fetch($key)
+  {
     $item = self::$cache->getItem(self::getCacheKey($key));
     $item = unserialize($item->get());
     return $item;
@@ -110,7 +120,8 @@ class Cache
    * @param string $key
    * @return bool
    */
-  public function has($key) {
+  public function has($key)
+  {
     $item = self::$cache->getItem(self::getCacheKey($key));
     return !is_null($item->get());
   }
@@ -124,12 +135,20 @@ class Cache
    * @param string $tag = null
    * @return bool
    */
-  public function save($key, $value, $ttl = 0, $tag = null) {
+  public function save($key, $value, $ttl = null, $tag = null)
+  {
+    $min_ttl = 3500;
+    $max_ttl = 3800;
+
+    if (is_null($ttl) || ($ttl > $min_ttl && $ttl < $max_ttl)) {
+      $ttl = rand($min_ttl, $max_ttl);
+    }
+
     $value = serialize($value);
     $item = self::$cache->getItem(self::getCacheKey($key));
     $item->set($value)->expiresAfter($ttl);
     return self::$cache->save($item);
-	}
+  }
 
   /**
    * Stores an array of items in the cache
@@ -137,11 +156,12 @@ class Cache
    * @param array $items
    * @return void
    */
-	public function saveMultiple(array $items) {
-		foreach($items as $item) {
-			$this->save($item['key'], $item['value'], $item['ttl'], $item['tag']);
-		}
-	}
+  public function saveMultiple(array $items)
+  {
+    foreach ($items as $item) {
+      $this->save($item['key'], $item['value'], $item['ttl'], $item['tag']);
+    }
+  }
 
   /**
    * Deletes the item from the cache
@@ -149,7 +169,8 @@ class Cache
    * @param string $key
    * @return bool
    */
-  public function delete($key) {
+  public function delete($key)
+  {
     $key = self::getCacheKey($key);
     return self::$cache->deleteItem($key);
   }
@@ -160,11 +181,12 @@ class Cache
    * @param array $keys
    * @return void
    */
-	public function deleteMultiple(array $keys) {
-		foreach($keys as $key) {
-			$this->delete($key);
-		}
-	}
+  public function deleteMultiple(array $keys)
+  {
+    foreach ($keys as $key) {
+      $this->delete($key);
+    }
+  }
 
   /**
    * Deletes items by tag
@@ -172,24 +194,26 @@ class Cache
    * @param string|array $tag
    * @return bool
    */
-	public function deleteTag($tag) {
+  public function deleteTag($tag)
+  {
     if (is_array($tag)) {
       return self::$cache->deleteItemsByTags($tag);
     }
 
     return self::$cache->deleteItemsByTag($tag);
-	}
+  }
 
   /**
    * Purges all items from the cache
    *
    * @return bool
    */
-	public function purge() {
-		return self::$cache->clear();
-	}
+  public function purge()
+  {
+    return self::$cache->clear();
+  }
 
-   /**
+  /**
    * One line fetch or set cache function
    *
    * @param $key string Name of the cache key
@@ -202,7 +226,7 @@ class Cache
     }
 
     $ttlValue = null;
-    $ttlFunction = function(int $value) use (&$ttlValue) {
+    $ttlFunction = function (int $value) use (&$ttlValue) {
       $ttlValue = $value;
     };
 
