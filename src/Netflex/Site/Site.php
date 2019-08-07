@@ -74,10 +74,10 @@ class Site
   public function loadPage($id, $revision) {
     global $_mode;
 
-    $this->content = NF::$cache->fetch('page/' . $id);
+    $this->content = NF::$cache->fetch("page/$id");
     if ($_mode || !$this->content) {
       $this->loadContent($id, $revision);
-      NF::$cache->save('page/$id', $this->content);
+      NF::$cache->save("page/$id", $this->content);
     }
   }
 
