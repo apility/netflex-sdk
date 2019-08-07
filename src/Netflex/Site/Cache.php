@@ -220,10 +220,9 @@ class Cache
    * @param $ttl int Cache time to live
    * @param $callback function A function that resolves the value if it is not already cached
    */
-  public static function resolve($key, $ttl = 3600, $callback)
-  {
-    if (self::$cache->has($key)) {
-      return self::$cache->get($key);
+  public function resolve($key, $ttl = 3600, $callback) {
+    if ($this->has($key)) {
+      return $this->get($key);
     }
 
     $ttlValue = null;
@@ -241,8 +240,8 @@ class Cache
       $response = $callback();
     }
 
-    self::$cache->set($key, $response, '_', $ttlValue ?? $ttl);
+    $this->set($key, $response, '_', $ttlValue ?? $ttl);
 
-    return self::$cache->get($key);
+    return $this->get($key);
   }
 }
