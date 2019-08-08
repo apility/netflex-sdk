@@ -46,12 +46,6 @@ class NF
   /** @var array[string]string */
   public static $routes;
 
-  /**
-   * @deprecated 1.0.11
-   * @var Console
-   * */
-  public static $console;
-
   /** @var string */
   public static $sitename;
 
@@ -102,7 +96,6 @@ class NF
       self::clearCache();
     }
 
-    self::$console = Console::getInstance();
     self::$site = new Site();
 
     // Datastore for Netflex
@@ -182,18 +175,6 @@ class NF
   }
 
   /**
-   * Instantiates a PHPConsole session
-   *
-   * @deprecated 1.0.11
-   * @return Console
-   */
-  public static function startPhpConsole()
-  {
-    trigger_error('NF::startPhpConsole is deprecated', E_USER_DEPRECATED);
-    return new Console();
-  }
-
-  /**
    * Write a debug message to the PhpConsole
    *
    * @param string $text The message to log
@@ -201,8 +182,8 @@ class NF
    */
   public static function debug($text, $label = null)
   {
-    $console = Console::getInstance();
-    $console->log($text, $label);
+    Console::getInstance()
+      ->log($text, $label);
   }
 
   /**

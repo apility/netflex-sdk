@@ -45,17 +45,4 @@ class Console {
       $this->handler->debug($text, $labels);
     }
   }
-
-  /**
-   * @deprecated 1.0.11
-   *
-   * @param string $text
-   * @param string $label
-   * @return void
-   */
-  public function debug ($text, $label)
-  {
-    trigger_error('NF::$console->debug is deprecated', E_USER_DEPRECATED);
-    return $this->log($text, $label);
-  }
 }
