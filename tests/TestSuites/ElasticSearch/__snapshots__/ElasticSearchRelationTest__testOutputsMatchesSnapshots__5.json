@@ -1,0 +1,10 @@
+{
+    "index": "customer",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": []
+        }
+    }
+}

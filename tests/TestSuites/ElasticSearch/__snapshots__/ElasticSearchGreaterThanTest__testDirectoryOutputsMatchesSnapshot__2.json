@@ -1,0 +1,20 @@
+{
+    "index": "entry",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "range": {
+                            "test": {
+                                "gte": 10
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

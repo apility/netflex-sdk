@@ -35,5 +35,10 @@
         tests/TestSuites/Editor
       </directory>
     </testsuite>
+    <testsuite name="ElasticSearch Tests">
+      <directory suffix=".test.php">
+        tests/TestSuites/ElasticSearch
+      </directory>
+    </testsuite>
   </testsuites>
 </phpunit>

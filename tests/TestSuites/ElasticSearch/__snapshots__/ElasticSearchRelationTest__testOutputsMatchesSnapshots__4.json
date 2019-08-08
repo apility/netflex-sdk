@@ -1,0 +1,10 @@
+{
+    "index": "signup",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": []
+        }
+    }
+}

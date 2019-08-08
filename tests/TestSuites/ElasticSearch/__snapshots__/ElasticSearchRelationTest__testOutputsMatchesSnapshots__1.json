@@ -1,0 +1,10 @@
+{
+    "index": "page",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": []
+        }
+    }
+}
