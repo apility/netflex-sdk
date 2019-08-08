@@ -1,53 +1,69 @@
 <?php
 
-use GuzzleHttp\Client;
-use Netflex\Site\Cache;
-use Netflex\Site\Site;
-use Netflex\Site\Store;
-use Netflex\Site\Security;
-use Netflex\Site\Util;
-use Netflex\Site\Commerce;
-use Netflex\Site\Search;
 use Netflex\Site\JWT;
+use GuzzleHttp\Client;
+use Netflex\Site\Site;
+use Netflex\Site\Util;
+use Netflex\Site\Cache;
+use Netflex\Site\Store;
 use Netflex\Site\Console;
+use Netflex\Site\Security;
+use Netflex\Site\Commerce;
+use Netflex\Site\ElasticSearch;
 
 class NF
 {
   /** @var JWT */
   public static $jwt;
+
   /** @var string */
   public static $path;
+
   /** @var Site */
   public static $site;
+
   /** @var Client */
   public static $capi;
+
   /** @var Util */
   public static $util;
+
   /** @var Store */
   public static $store;
+
   /** @var Cache */
   public static $cache;
-  /** @var Search */
+
+  /** @var ElasticSearch */
   public static $search;
+
   /** @var string */
   public static $branch;
+
   /** @var array[string]string */
   public static $config;
+
   /** @var array[string]string */
   public static $routes;
+
   /**
    * @deprecated 1.0.11
    * @var Console
    * */
   public static $console;
+
   /** @var string */
   public static $sitename;
+
   /** @var Security */
   public static $security;
+
   /** @var Commerce */
   public static $commerce;
+
   /** @var string */
   public static $cacheDir;
+
   /** @var string */
   public static $site_root;
 
@@ -102,7 +118,7 @@ class NF
     self::$util = new Util();
     self::$commerce = new Commerce();
 
-    self::$search = new Search();
+    self::$search = new ElasticSearch();
   }
 
   /**
@@ -206,7 +222,7 @@ class NF
   /**
    * Returns a Search instance
    *
-   * @return Search
+   * @return ElasticSearch
    */
   public static function search()
   {
