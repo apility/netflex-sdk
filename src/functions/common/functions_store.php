@@ -45,11 +45,13 @@ function get_order($id)
 /**
  * In Stock
  *
- * @deprecated 1.1.0
+ * @deprecated v1.1.0
  * @return int
  */
 function in_stock()
 {
+  trigger_error('in_stock is deprecated', E_USER_DEPRECATED);
+
   return 1;
 }
 

@@ -20,6 +20,7 @@ function convert_datetime($date, $format)
 /**
  * Security and conversion variables
  *
+ * @deprecated v1.1.0
  * @param string $value
  * @param string $type
  * @param string $definedValue = ""
@@ -28,6 +29,8 @@ function convert_datetime($date, $format)
  */
 function convert_to_safe_string($value, $type, $definedValue = "", $undefinedValue = "")
 {
+  trigger_error('convert_to_safe_string is deprecated', E_USER_DEPRECATED);
+
   switch ($type) {
     case 'text':
       $value = ($value != '') ? "'" . $value . "'" : 'null';

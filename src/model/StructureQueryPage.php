@@ -7,25 +7,25 @@ use ArrayAccess;
 trait DeprecatedFieldsInStructureQueryPage
 {
   /**
-   * @deprecated
+   * @deprecated v1.1.0
    * @var int
    */
   public $last_page;
 
   /**
-   * @deprecated
+   * @deprecated v1.1.0
    * @var int|null
    */
   public $next_page;
 
   /**
-   * @deprecated
+   * @deprecated v1.1.0
    * @var int
    */
   public $total_items;
 
   /**
-   * @deprecated
+   * @deprecated v1.1.0
    * @var int|null
    */
   public $items_per_page;
