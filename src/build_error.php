@@ -13,16 +13,16 @@ $isAsset = $url == 'browserconfig.xml/' &&
 
 if (!$isAsset) {
 
-  $logtype = convert_to_safe_string('page', 'text');
-  $loglink = convert_to_safe_string($url, 'text');
-  $logcode = convert_to_safe_string('404', 'int');
-  $logref = convert_to_safe_string('none', 'text');
+  $logtype = 'page';
+  $loglink = strip_tags($url);
+  $logcode = 404;
+  $logref = 'none';
 
   if (isset($_SERVER['HTTP_REFERER'])) {
-    $logref = convert_to_safe_string($_SERVER['HTTP_REFERER'], 'text');
+    $logref = strip_tags($_SERVER['HTTP_REFERER']);
   }
 
-  $logagent = convert_to_safe_string($_SERVER['HTTP_USER_AGENT'], 'text');
+  $logagent = strip_tags($_SERVER['HTTP_USER_AGENT']);
 
   //Set header
   http_response_code(404);

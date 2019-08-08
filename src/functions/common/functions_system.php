@@ -42,8 +42,8 @@ function get_redirect($url, $data)
     NF::$cache->save("redirects", $redirects);
   }
 
-  $current_host = convert_to_safe_string($_SERVER['HTTP_HOST'], 'str');
-  $current_host_slash = convert_to_safe_string($_SERVER['HTTP_HOST'], 'str') . '/';
+  $current_host = $_SERVER['HTTP_HOST'];
+  $current_host_slash = $_SERVER['HTTP_HOST'] . '/';
 
   if (count($redirects)) {
     foreach ($redirects as $item) {
@@ -214,7 +214,7 @@ function random_string($length)
 function send_notification($subject, $body, $receivers = [], $log = true, $template = null, $reply_to = null)
 {
   // Clean values
-  $subject = convert_to_safe_string($subject, 'str');
+  $subject = strip_tags($subject);
   $body = base64_encode($body);
 
   // Set receivers

@@ -33,7 +33,7 @@ function get_page_blocks($area, $vars = null)
     }
 
     foreach ($content as $section) {
-      $block = convert_to_safe_string($section['text'], 'int');
+      $block = $section['text'];
       $alias = NF::$site->templates['components'][$block]['alias'];
       $blockhash = $section['title'];
       NF::debug('components/' . $alias, 'component');
@@ -80,7 +80,7 @@ function display_page_blocks($page_id, $area, $vars = null)
     NF::$site->content = get_full_content_array($page_id);
 
     foreach ($content as $section) {
-      $block = convert_to_safe_string($section['text'], 'int');
+      $block = $section['text'];
       $alias = NF::$site->templates['components'][$block]['alias'];
       $blockhash = $section['title'];
       NF::debug('components/' . $alias, 'component');

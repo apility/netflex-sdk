@@ -30,8 +30,6 @@ if ($navData == null) {
 function get_nav_sub_ids($page_id, $visibility = null)
 {
   $ids = [];
-  $page_id = convert_to_safe_string($page_id, 'int');
-  $visibility = convert_to_safe_string($visibility, 'str');
   $pages = NF::$site->pages;
   if ($visibility == null) {
     foreach ($pages as $pg) {

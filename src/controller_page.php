@@ -10,7 +10,7 @@ require_once(__DIR__ . '/model/autoloader.php');
 
 // Get and clean url for security
 $real_url = explode('?', urldecode($_GET['_path']))[0];
-$url = trim(convert_to_safe_string($real_url, 'long'), '/');
+$url = trim($real_url, '/');
 
 if (strpos($url, '_/') === 0) {
   global $url_asset;
@@ -40,7 +40,7 @@ if ($url == '') {
 $url = $url . '/';
 
 // Get full url for checking redirects
-$fullUrl = ltrim(convert_to_safe_string($_SERVER['REQUEST_URI'], 'long'), '/');
+$fullUrl = ltrim($_SERVER['REQUEST_URI'], '/');
 
 // Log url and full url
 NF::debug($url, 'Path');
