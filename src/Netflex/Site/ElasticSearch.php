@@ -16,7 +16,10 @@ class ElasticSearch
   private $_index = 'entry';
   private $_terms = [];
 
-  private $_query = [
+  /** @var bool */
+  private $isRawSearch = false;
+
+  private $query = [
     'index' => 'entry',
     '_source' => [],
     'body' => [
@@ -99,12 +102,17 @@ class ElasticSearch
    */
   public function raw($query)
   {
-    $this->_query = $query;
+    $this->query = $query;
+    $this->isRawSearch = true;
     return $this;
   }
 
   private function buildQuery()
   {
+    if ($this->isRawSearch) {
+      return $this->query;
+    }
+
     $query = [];
     $previousTerm = null;
     $previousNode = null;
