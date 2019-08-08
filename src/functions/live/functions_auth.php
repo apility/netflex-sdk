@@ -7,12 +7,11 @@
  * @param string $password
  * @param string $groups = '99999'
  * @param string $field = 'mail'
+ * @return int
  */
 function check_login($username, $password, $groups = '99999', $field = 'mail')
 {
-  $username = convert_to_safe_string(strtolower($username), 'str');
-  $password = convert_to_safe_string($password, 'str');
-  $groups = convert_to_safe_string($groups, 'str');
+  $username = strtolower($username);
 
   if ($groups == '99999') {
     $input = ['username' => $username, 'password' => $password, 'field' => $field];
@@ -56,21 +55,25 @@ function check_login($username, $password, $groups = '99999', $field = 'mail')
 function check_access($username = null, $groups = null)
 {
   if ($username != null || $groups = null) {
-    $username = convert_to_safe_string($username, 'str');
-
     try {
-      $customer = json_decode(NF::$capi->get('relations/customers/customer/resolve/' . $username)->getBody(), true);
-    } catch (Exception $e) {
-      return 0;
-    }
+      $customer = json_decode(
+        NF::$capi->get('relations/customers/customer/resolve/' . $username)
+          ->getBody(),
+        true
+        );
 
-    if (isset($customer['id']) && $groups == '99999') {
-      return 1;
-    } else if (isset($customer['id']) && in_array($group, $customer['groups'])) {
-      return 1;
-    } else if (isset($customer['id'])) {
-      return 2;
-    }
+      if (isset($customer['id']) && $groups == '99999') {
+        return 1;
+      }
+
+      if (isset($customer['id']) && in_array($groups, $customer['groups'])) {
+        return 1;
+      }
+
+      if (isset($customer['id'])) {
+        return 2;
+      }
+    } catch (Exception $e) {}
 
     return 0;
   }

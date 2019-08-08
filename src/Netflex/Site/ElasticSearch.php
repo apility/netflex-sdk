@@ -10,13 +10,16 @@ use Exception;
  */
 class ElasticSearch
 {
+  /** @var array */
+  private $terms = [];
 
-  private $_result = null;
-  private $_sort = [];
-  private $_index = 'entry';
-  private $_terms = [];
+  /** @var array|null */
+  private $result = null;
 
-  private $_query = [
+  /** @var bool */
+  private $isRawSearch = false;
+
+  private $query = [
     'index' => 'entry',
     '_source' => [],
     'body' => [
@@ -27,22 +30,35 @@ class ElasticSearch
     ]
   ];
 
-  /** Defines legal relation types */
-  protected $_relations = [
-    'page',
-    'entry',
-    'order',
-    'signup',
-    'customer',
-  ];
+  /** @var string */
+  const PAGE = 'page';
 
+  /** @var string */
+  const ENTRY = 'entry';
+
+  /** @var string */
+  const ORDER = 'order';
+
+  /** @var string */
+  const SIGNUP = 'signup';
+
+  /** @var string */
+  const CUSTOMER = 'customer';
+
+  /**
+   * Perform a Lucenene query
+   *
+   * @param string $string
+   * @param bool $or
+   * @return static
+   */
   public function query($string = '', $or = false)
   {
-    if (!isset($this->_terms['query'])) {
-      $this->_terms['query'] = [];
+    if (!isset($this->terms['query'])) {
+      $this->terms['query'] = [];
     }
 
-    $this->_terms['query'][] = [
+    $this->terms['query'][] = [
       'key' => 'query',
       'param' => $string,
       'match' => 'must',
@@ -54,39 +70,39 @@ class ElasticSearch
   }
 
   /**
-   * Sets the relation for Search
+   * Sets the relation
    *
-   * @params string $relation
-   * @return Search
+   * @param string $relation
+   * @return static
    */
   public function relation($relation)
   {
-    $this->_query['index'] = $relation;
+    $this->query['index'] = $relation;
     return $this;
   }
 
   /**
-   * Adds a directory to the search query
+   * Adds a directory constraint
    *
-   * @param string|int $directory
-   * @return Search
+   * @param int $directory
+   * @return static
    */
   public function directory($directory = null)
   {
-    $this->_query['index'] = 'entry_' . $directory;
+    $this->query['index'] = 'entry_' . $directory;
     $this->equals('directory_id', $directory);
     return $this;
   }
 
   /**
-   * Excludes a directory from the search query
+   * Excludes a directory
    *
-   * @param string|int $directory
-   * @return Search
+   * @param int $directory
+   * @return static
    */
   public function notDirectory($directory = null)
   {
-    $this->_query['index'] = 'entry';
+    $this->query['index'] = 'entry';
     $this->notEquals('directory_id', $directory);
     return $this;
   }
@@ -94,21 +110,31 @@ class ElasticSearch
   /**
    * Overrides the query string
    *
-   * @params string $query Raw qery string
-   * @return Search
+   * @param string $query Raw qery string
+   * @return static
    */
   public function raw($query)
   {
-    $this->_query = $query;
+    $this->query = $query;
+    $this->isRawSearch = true;
     return $this;
   }
 
-  private function buildQuery()
+  /**
+   * Compiles the query
+   *
+   * @return array
+   */
+  public function buildQuery()
   {
+    if ($this->isRawSearch) {
+      return $this->query;
+    }
+
     $query = [];
     $previousTerm = null;
     $previousNode = null;
-    foreach ($this->_terms as $field => $terms) {
+    foreach ($this->terms as $field => $terms) {
       $terms = count($terms) ? $terms : [$terms];
 
       foreach ($terms as $term) {
@@ -137,9 +163,9 @@ class ElasticSearch
               unset($query[$previousTerm['match']]['query_string']);
             }
           } else if (isset($previousTerm['param']['must_not'])) {
-            array_pop($query[$previousTerm['match']][$previous['type']]);
-            if (!count($query[$previousTerm['match']][$previous['type']])) {
-              unset($query[$previousTerm['match']][$previous['type']]);
+            array_pop($query[$previousTerm['match']][$previousTerm['type']]);
+            if (!count($query[$previousTerm['match']][$previousTerm['type']])) {
+              unset($query[$previousTerm['match']][$previousTerm['type']]);
             }
           } else {
             array_pop($query[$previousTerm['match']]);
@@ -157,62 +183,67 @@ class ElasticSearch
       }
     }
 
-    $this->_query['body']['query'] = ['bool' => $query];
+    $this->query['body']['query'] = ['bool' => $query];
+
+    return $this->query;
   }
 
   /**
    * Performs the actual search with the built query
    *
-   * @params bool $fetch Fetches the search results
-   * @params bool $debug Returns debug info for the search
-   * @params array $order Sort key and order of the search
-   * @params string $limit Limit results on search
-   * @params string $from From result item for pagination
-   * @params bool $count Returns the number of hits for the search
-   * @params bool $json Returns the results as an Object
-   * @return mixed
+   * @throws Exception
+   * @return void
    */
-  private function execute($debug = false)
+  private function execute()
   {
+    if (!get_setting('use_elasticsearch')) {
+      throw new Exception('ElasticSearch is not enabled for this site');
+    }
+
     $this->buildQuery();
 
-    NF::debug(json_encode($this->_query, JSON_PRETTY_PRINT), 'ElasticSearchQuery');
+    NF::debug(json_encode($this->query, JSON_PRETTY_PRINT), 'ElasticSearch');
 
-    $url = 'search/raw';
     try {
-      $result = NF::$capi
-        ->post($url, ['json' => $this->_query])
-        ->getBody();
-      $this->_result = json_decode(
+      $result = NF::$capi->post('search/raw', [
+        'json' => $this->query
+      ])->getBody();
+
+      $this->result = json_decode(
         str_replace('##D##', '-', json_encode(json_decode($result)))
       );
     } catch (Exception $ex) {
-      $this->_result = json_decode(
+      $this->result = json_decode(
         json_encode(['hits' => ['total' => 0]])
       );
-      NF::$console->debug($ex);
-      throw new Exception(json_encode($this->_query));
+
+      NF::debug($ex, 'ElasticSearch');
+      throw new Exception(json_encode($this->query));
     }
   }
 
   /**
    * Builds a partial query string
    *
-   * @params string $key The property to query
-   * @params string $param The value to query
-   * @params string $type The bool type type
-   * @return string
+   * @param string $key The property to query
+   * @param string $param The value to query
+   * @param string $type The bool type type
+   * @param string $match
+   * @param bool $or = false
+   * @return static
    */
   public function where($key, $param, $type = 'term', $match = 'must', $or = false)
   {
     $key = str_replace('-', '##D##', $key);
+
     if (is_null($param)) {
       $type = 'bool';
-      /* $type = 'filter'; */
-      $param = [$match === 'must_not' ? 'must' : 'must_not' => ['exists' => ['field' => $key]]];
+      $match_type = $match === 'must_not'? 'must' : 'must_not';
+      $param = [$match_type => ['exists' => ['field' => $key]]];
     }
-    $this->_terms[$key] = !isset($this->_terms[$key]) ? [] : $this->_terms[$key];
-    $this->_terms[$key][] = [
+
+    $this->terms[$key] = $this->terms[$key] ?? [];
+    $this->terms[$key][] = [
       'key' => $key,
       'param' => $param,
       'type' => $type,
@@ -226,9 +257,10 @@ class ElasticSearch
   /**
    * Search where key not contains the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function notContains($key, $param, $or = false)
   {
@@ -239,9 +271,10 @@ class ElasticSearch
   /**
    * Search where key contains the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function contains($key, $param, $or = false)
   {
@@ -251,9 +284,10 @@ class ElasticSearch
   /**
    * Search where key equals the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function equals($key, $param, $or = false)
   {
@@ -263,9 +297,10 @@ class ElasticSearch
   /**
    * Search where key not equals the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function notEquals($key, $param, $or = false)
   {
@@ -275,9 +310,10 @@ class ElasticSearch
   /**
    * Search where key is less than the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function lessThan($key, $param, $or = false)
   {
@@ -288,9 +324,10 @@ class ElasticSearch
   /**
    * Search where key is less than the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function lessThanOrEqual($key, $param, $or = false)
   {
@@ -301,9 +338,10 @@ class ElasticSearch
   /**
    * Search where key in range of $from -> $to value
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function range($key, $from, $to, $or = false)
   {
@@ -314,9 +352,10 @@ class ElasticSearch
   /**
    * Search where key is greater than the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function greaterThan($key, $param, $or = false)
   {
@@ -327,9 +366,10 @@ class ElasticSearch
   /**
    * Search where key is greater than the given param
    *
-   * @params string $key
-   * @params mixed $param
-   * @return Search
+   * @param string $key
+   * @param mixed $param
+   * @param bool $or = false
+   * @return static
    */
   public function greaterThanOrEqual($key, $param, $or = false)
   {
@@ -338,26 +378,26 @@ class ElasticSearch
   }
 
   /**
-   * Number of items to return
+   * Max items to return
    *
-   * @params string $limit
-   * @return Search
+   * @param string $limit
+   * @return static
    */
   public function limit($limit)
   {
-    $this->_query['size'] = $limit;
+    $this->query['size'] = $limit;
     return $this;
   }
 
   /**
    * Return records from this item for pagination
    *
-   * @params string $from
-   * @return Search
+   * @param string $from
+   * @return static
    */
   public function from($from)
   {
-    $this->_query['from'] = $from;
+    $this->query['from'] = $from;
     return $this;
   }
 
@@ -378,7 +418,7 @@ class ElasticSearch
     $this->execute();
     return array_map(function ($hit) {
       return $hit->_source;
-    }, $this->_result->hits->hits);
+    }, $this->result->hits->hits);
   }
 
   /**
@@ -388,7 +428,7 @@ class ElasticSearch
    */
   public function getRawResults()
   {
-    return $this->_result;
+    return $this->result;
   }
 
   /**
@@ -398,27 +438,26 @@ class ElasticSearch
    */
   public function debug()
   {
-    $this->buildQuery();
-    return $this->_query;
+    return $this->buildQuery();
   }
 
   /**
    * Specifies a field to get
    *
-   * @params string $item Field name
-   * @return Search
+   * @param string $item Field name
+   * @return static
    */
   public function field($item)
   {
-    $this->_query['_source'][] = $item;
+    $this->query['_source'][] = $item;
     return $this;
   }
 
   /**
    * Specifies multiple fields to get
    *
-   * @params array $items Array of field names
-   * @return Search
+   * @param array $items Array of field names
+   * @return static
    */
   public function fields($items = [])
   {
@@ -431,14 +470,14 @@ class ElasticSearch
   /**
    * Sorts the search by the given key and direction
    *
-   * @params string $key Field name
-   * @params string $dir Direction
-   * @return Search
+   * @param string $key Field name
+   * @param string $dir Direction
+   * @return static
    */
   public function sortBy($key = 'updated', $dir = 'asc')
   {
     $dir = !in_array($dir, ['asc', 'desc']) ? 'asc' : $dir;
-    $this->_query['body']['sort'][] = [$key => $dir];
+    $this->query['body']['sort'][] = [$key => $dir];
     return $this;
   }
 
@@ -449,10 +488,10 @@ class ElasticSearch
    */
   public function count()
   {
-    $_source = $this->_query['_source'];
-    $this->_query['_source'] = ['id'];
+    $_source = $this->query['_source'];
+    $this->query['_source'] = ['id'];
     $this->execute();
-    $this->_query['_source'] = $_source;
-    return $this->_result->hits->total;
+    $this->query['_source'] = $_source;
+    return $this->result->hits->total;
   }
 }

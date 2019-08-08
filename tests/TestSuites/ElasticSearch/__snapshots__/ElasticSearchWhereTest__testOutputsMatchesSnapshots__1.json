@@ -1,0 +1,18 @@
+{
+    "index": "entry",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "test": "abc"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

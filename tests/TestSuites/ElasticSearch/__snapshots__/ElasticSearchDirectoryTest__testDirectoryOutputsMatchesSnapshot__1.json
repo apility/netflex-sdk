@@ -1,0 +1,18 @@
+{
+    "index": "entry_10000",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "directory_id": 10000
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

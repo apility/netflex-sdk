@@ -1,0 +1,12 @@
+{
+    "index": "entry",
+    "_source": [
+        "field1"
+    ],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": []
+        }
+    }
+}
