@@ -1,0 +1,18 @@
+{
+    "index": "entry",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": {
+                "must_not": [
+                    {
+                        "match": {
+                            "test": "hello"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

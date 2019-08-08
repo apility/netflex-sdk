@@ -1,0 +1,14 @@
+{
+    "index": "entry",
+    "_source": [],
+    "body": {
+        "sort": [
+            {
+                "test": "asc"
+            }
+        ],
+        "query": {
+            "bool": []
+        }
+    }
+}

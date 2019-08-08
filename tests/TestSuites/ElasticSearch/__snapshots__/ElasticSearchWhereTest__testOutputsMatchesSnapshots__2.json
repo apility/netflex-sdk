@@ -1,0 +1,22 @@
+{
+    "index": "entry",
+    "_source": [],
+    "body": {
+        "sort": [],
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "bool": {
+                            "must_not": {
+                                "exists": {
+                                    "field": "test"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

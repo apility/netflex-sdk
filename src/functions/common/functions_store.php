@@ -17,14 +17,7 @@ function get_order_id()
  */
 function get_order_secret()
 {
-  if (isset($_SESSION['netflex_cart'])) {
-    $secret = convert_to_safe_string($_SESSION['netflex_cart'], 'str');
-  } else if (isset($_COOKIE['netflex_cart'])) {
-    $secret = convert_to_safe_string($_COOKIE['netflex_cart'], 'str');
-  } else {
-    $secret = null;
-  }
-  return $secret;
+  return $_SESSION['netflex_cart'] ?? $_COOKIE['netflex_cart'] ?? null;
 }
 
 /**
@@ -52,11 +45,13 @@ function get_order($id)
 /**
  * In Stock
  *
- * @deprecated 1.1.0
+ * @deprecated v1.1.0
  * @return int
  */
 function in_stock()
 {
+  trigger_error('in_stock is deprecated', E_USER_DEPRECATED);
+
   return 1;
 }
 
@@ -193,8 +188,6 @@ function get_customer_orders($customer_id)
  */
 function start_checkout($order_id)
 {
-  // Clean data
-  $order_id = convert_to_safe_string($order_id, 'int');
   $user_ip = get_client_ip();
   $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
