@@ -23,9 +23,3 @@ foreach (glob($basepath . '/' . $mode . '/*.php') as $filename) {
   require_once($filename);
 }
 
-if (function_exists('get_setting')) {
-  if (get_setting('use_elasticsearch')) {
-    NF::$search = new Netflex\Site\ElasticSearch();
-    NF::debug('Using ElasticSearch', 'info');
-  }
-}
