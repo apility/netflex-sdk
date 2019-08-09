@@ -77,7 +77,7 @@ class Site
     $this->content = NF::$cache->fetch("page/$id");
     if ($_mode) {
       $this->content = [];
-      $this>-loadContent($id, $revision);
+      $this->loadContent($id, $revision);
     } else if (!$this->content) {
       $this->loadContent($id, $revision);
       NF::$cache->save("page/$id", $this->content);
