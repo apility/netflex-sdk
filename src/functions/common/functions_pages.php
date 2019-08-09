@@ -140,8 +140,6 @@ function get_page_name($id)
  */
 function get_page_data($id, $field = null)
 {
-  global $site;
-
   if ($field) {
     return NF::$site->pages[$id][$field];
   }
