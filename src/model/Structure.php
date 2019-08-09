@@ -95,7 +95,6 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
         NF::$capi->put('builder/structures/entry/' . $this->id, $payload);
         static::performHookOn($this, 'updated');
       } else {
-
         static::performHookOn($this, 'creating');
         $response = NF::$capi->post('builder/structures/' . $this->directory . '/entry', $payload);
         static::performHookOn($this, 'created');

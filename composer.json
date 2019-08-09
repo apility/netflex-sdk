@@ -54,7 +54,7 @@
   },
   "require": {
     "guzzlehttp/guzzle": "^6.2",
-    "nesbot/carbon": "^1.21",
+    "nesbot/carbon": "^2.22",
     "phpfastcache/phpfastcache": "^7.0",
     "php-console/php-console": "^3.1",
     "ivopetkov/html5-dom-document-php": "^2.0",

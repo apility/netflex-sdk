@@ -75,7 +75,10 @@ class Site
     global $_mode;
 
     $this->content = NF::$cache->fetch("page/$id");
-    if ($_mode || !$this->content) {
+    if ($_mode) {
+      $this->content = [];
+      $this>-loadContent($id, $revision);
+    } else if (!$this->content) {
       $this->loadContent($id, $revision);
       NF::$cache->save("page/$id", $this->content);
     }
@@ -85,7 +88,6 @@ class Site
   public function loadContent($id, $revision) {
     try {
       $contentItems = json_decode(NF::$capi->get('builder/pages/' . $id . '/content' . ($revision ? ('/' . $revision) : ''))->getBody(), true);
-
       foreach ($contentItems as $item) {
         if ($item['published'] === '1') {
           if (isset($this->content[$item['area']])) {
