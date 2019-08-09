@@ -6,6 +6,8 @@ NF::init(getenv('SERVER_SITENAME'));
 // Set standard variables
 $current_date = date('Y-m-d H:i:s');
 $edit_tools = null;
+
+/** @type mixed */
 $url_asset = null;
 $tested_url = null;
 
