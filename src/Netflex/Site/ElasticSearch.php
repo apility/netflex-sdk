@@ -194,7 +194,7 @@ class ElasticSearch
    * @throws Exception
    * @return void
    */
-  private function execute()
+  public function execute()
   {
     if (!get_setting('use_elasticsearch')) {
       throw new Exception('ElasticSearch is not enabled for this site');
