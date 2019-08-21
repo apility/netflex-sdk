@@ -192,7 +192,7 @@ class ElasticSearch
    * Performs the actual search with the built query
    *
    * @throws Exception
-   * @return void
+   * @return static
    */
   public function execute()
   {
@@ -220,6 +220,8 @@ class ElasticSearch
       NF::debug($ex, 'ElasticSearch');
       throw new Exception(json_encode($this->query));
     }
+    
+    return $this;
   }
 
   /**
