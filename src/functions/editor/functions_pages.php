@@ -142,9 +142,10 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  * @param string $compression
  * @param string $class = null
  * @param string $fill = '255,255,255'
+ * @param string $picture_class = null
  * @return string
  */
-function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null, $resolutions = [])
+function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null)
 {
   global $page_id;
   global $revision;
@@ -187,7 +188,7 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
   return <<<HTML
     <picture
       id="e-{$image['id']}-$column"
-      class="$picture_class $class find-image"
+      class="$picture_class find-image"
       data-content-area="$area"
       data-content-type="$column"
       data-content-dimensions="$dimensions"
