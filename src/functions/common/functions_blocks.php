@@ -150,9 +150,10 @@ function get_block_content_wrap($area, $tag, $class = null)
  * @param string $class = null
  * @param string $fill = null
  * @param string $picture_class = null
+ * @param array $resolutions = [320, 480, 768, 992, 1200]
  * @return string
  */
-function get_block_content_image($area, $dimensions, $compression_type, $class = null, $fill = null, $picture_class = null)
+function get_block_content_image($area, $dimensions, $compression_type, $class = null, $fill = null, $picture_class = null, $resolutions = [320, 480, 768, 992, 1200])
 {
   global $blockhash;
 
@@ -161,11 +162,8 @@ function get_block_content_image($area, $dimensions, $compression_type, $class =
   }
 
   $area = $area . '_' . $blockhash;
-  $image = get_page_content_string($area, 'image');
-  $alt = get_page_content_string($area, 'description');
-  $title = get_page_content_string($area, 'title');
 
-  return get_page_content_image($area, 'image', $dimensions, $compression_type, $class, $fill, $picture_class);
+  return get_page_content_image($area, 'image', $dimensions, $compression_type, $class, $fill, $picture_class, $resolutions);
 }
 
 /**

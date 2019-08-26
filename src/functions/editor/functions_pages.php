@@ -143,9 +143,10 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  * @param string $class = null
  * @param string $fill = '255,255,255'
  * @param string $picture_class = null
+ * @param array $resolutions = [320, 480, 768, 992, 1200]
  * @return string
  */
-function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null)
+function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null, $resolutions = [320, 480, 768, 992, 1200])
 {
   global $page_id;
   global $revision;
@@ -185,23 +186,29 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
     $src = $domain . $url;
   }
 
+  $sources = '';
+
+  if ($resolutions) {
+    foreach ($resolutions as $resolution) {
+      $sources .= <<<HTML
+        <source srcset="{$src}?src={$resolution}w" media="(max-width: {$resolution}px)">
+HTML;
+    }
+  }
+
   return <<<HTML
     <picture
-      id="e-{$image['id']}-$column"
-      class="$picture_class find-image"
-      data-content-area="$area"
-      data-content-type="$column"
-      data-content-dimensions="$dimensions"
-      data-content-compressiontype="$compression"
+      id="e-{$image['id']}-{$column}"
+      class="{$picture_class} find-image"
+      data-content-area="{$area}"
+      data-content-type="{$column}"
+      data-content-dimensions="{$dimensions}"
+      data-content-compressiontype="{$compression}"
       data-content-id="{$image['id']}"
     >
-		  <source srcset="$src?src=320w" media="(max-width: 320px)">
-		  <source srcset="$src?src=480w" media="(max-width: 480px)">
-		  <source srcset="$src?src=768w" media="(max-width: 768px)">
-		  <source srcset="$src?src=992w" media="(max-width: 992px)">
-		  <source srcset="$src?src=1200w" media="(max-width: 1200px)">
-		  <source srcset="$src">
-		  <img class="$class" src="$src" alt="$alt" title="$title" />
+{$sources}
+		  <source srcset="{$src}">
+		  <img class="{$class}" src="{$src}" alt="{$alt}" title="{$title}" />
 		</picture>
 HTML;
 }

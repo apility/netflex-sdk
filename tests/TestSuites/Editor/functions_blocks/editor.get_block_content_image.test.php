@@ -51,5 +51,15 @@ final class Editor_GetBlockContentImageTest extends TestCase
       get_block_content_image('test', '100x100', 'fill', 'testclass', '255,255,255', 'testclass2'),
       new HtmlDriver
     );
+
+    $this->assertMatchesSnapshot(
+      get_block_content_image('test', '100x100', 'fill', 'testclass', '255,255,255', 'testpictureclass'),
+      new HtmlDriver
+    );
+
+    $this->assertMatchesSnapshot(
+      get_block_content_image('test', '100x100', 'fill', 'testclass', '255,255,255', 'testpictureclass', [1, 2, 4, 8, 16, 32, 64, 128, 256]),
+      new HtmlDriver
+    );
   }
 }
