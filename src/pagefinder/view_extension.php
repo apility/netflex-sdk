@@ -1,4 +1,7 @@
 <?php
+global $_domain;
+
+$_domain = $payload->domain;
 
 if (isset($payload->get)) {
   foreach ($payload->get as $key => $value) {
