@@ -153,11 +153,10 @@ function calculateMac($msg, $K)
  *
  * @param string $label
  * @param string $lang = null
- * @return void
+ * @return string
  */
 function get_label($label, $lang = null)
 {
-  global $labels;
   global $page;
 
   $base64label = base64_encode($label);
@@ -169,9 +168,20 @@ function get_label($label, $lang = null)
   if ($label != null && $lang != null) {
     if (isset(NF::$site->labels[$base64label][$lang])) {
       return NF::$site->labels[$base64label][$lang];
-    }
+    } else {
+      try {
+        NF::$capi->post('foundation/labels', ['json' => [
+          'label' => $base64label
+        ]]);
+      } catch (Exception $e) {} finally {
+        NF::$site->loadLabels();
+        NF::$cache->save('labels', NF::$site->labels, 3600);
+      }
 
-    return $label;
+      if (isset(NF::$site->labels[$base64label][$lang])) {
+        return NF::$site->labels[$base64label][$lang];
+      }
+    }
   }
 
   return $label;
