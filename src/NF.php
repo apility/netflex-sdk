@@ -10,6 +10,7 @@ use Netflex\Site\Console;
 use Netflex\Site\Security;
 use Netflex\Site\Commerce;
 use Netflex\Site\ElasticSearch;
+use Netflex\API;
 
 class NF
 {
@@ -194,10 +195,65 @@ class NF
    */
   private static function initGuzzle($config)
   {
+    API::setCredentials(
+      $config['api']['pubkey'],
+      $config['api']['privkey']
+    );
+
     return new Client([
       'base_uri' => 'https://api.netflexapp.com/v1/',
       'auth'    => [$config['api']['pubkey'], $config['api']['privkey']]
     ]);
+  }
+
+  /**
+   * Performs API request with HTTP GET method and returns the response
+   *
+   * @param string $url Relative to the /v1/ root of the API
+   * @param bool $assoc = false Determines if the response should be parsed as associative array or object
+   * @return object|array
+   */
+  public static function get ($url, $assoc = false) {
+    return API::getClient()
+      ->get($url, $assoc);
+  }
+
+  /**
+   * Performs API request with HTTP PUT method and returns the response
+   *
+   * @param string $url Relative to the /v1/ root of the API
+   * @param array $payload = []
+   * @param bool $assoc = false Determines if the response should be parsed as associative array or object
+   * @return object|array
+   */
+  public static function put ($url, $payload = [], $assoc = false) {
+    return API::getClient()
+      ->put($url, $payload, $assoc);
+  }
+
+  /**
+   * Performs API request with HTTP POST method and returns the response
+   *
+   * @param string $url Relative to the /v1/ root of the API
+   * @param array $payload = []
+   * @param bool $assoc = false Determines if the response should be parsed as associative array or object
+   * @return object|array|string
+   */
+  public static function post ($url, $payload = [], $assoc = false) {
+    return API::getClient()
+      ->post($url, $payload, $assoc);
+  }
+
+  /**
+   * Performs API request with HTTP DELETE method and returns the response
+   *
+   * @param string $url Relative to the /v1/ root of the API
+   * @param bool $assoc = false Determines if the response should be parsed as associative array or object
+   * @return object|array|string
+   */
+  public static function delete ($url, $assoc = false) {
+    return API::getClient()
+      ->delete($url, $assoc);
   }
 
   /**
