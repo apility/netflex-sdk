@@ -200,10 +200,8 @@ class NF
       $config['api']['privkey']
     );
 
-    return new Client([
-      'base_uri' => 'https://api.netflexapp.com/v1/',
-      'auth'    => [$config['api']['pubkey'], $config['api']['privkey']]
-    ]);
+    return API::getClient()
+      ->getGuzzleInstance();
   }
 
   /**
