@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee7dc4aa89ec41c279abe46ff3ddb874",
+    "content-hash": "196314b1bd46aa949c5361451ed238a5",
     "packages": [
         {
             "name": "apility/netflex-api",
@@ -43,6 +43,46 @@
                 }
             ],
             "time": "2019-10-17T11:44:37+00:00"
+        },
+        {
+            "name": "apility/netflex-support",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apility/netflex-support.git",
+                "reference": "789473c43c4a69e098814ea6cf05e109a21e33ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apility/netflex-support/zipball/789473c43c4a69e098814ea6cf05e109a21e33ab",
+                "reference": "789473c43c4a69e098814ea6cf05e109a21e33ab",
+                "shasum": ""
+            },
+            "require": {
+                "apility/netflex-api": "^1.0",
+                "tightenco/collect": "^6.3"
+            },
+            "require-dev": {
+                "larapack/dd": "^1.1",
+                "vlucas/phpdotenv": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Netflex\\Support\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Alrek",
+                    "email": "thomas@apility.no"
+                }
+            ],
+            "time": "2019-10-17T14:11:43+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -275,16 +315,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.25.2",
+            "version": "2.25.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "443fe5f1498147e0fbc792142b5dc43e2e8a533f"
+                "reference": "d07636581795383e2fea2d711212d30f941f2039"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/443fe5f1498147e0fbc792142b5dc43e2e8a533f",
-                "reference": "443fe5f1498147e0fbc792142b5dc43e2e8a533f",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/d07636581795383e2fea2d711212d30f941f2039",
+                "reference": "d07636581795383e2fea2d711212d30f941f2039",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +378,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-10-14T14:18:59+00:00"
+            "time": "2019-10-20T11:05:44+00:00"
         },
         {
             "name": "php-console/php-console",
@@ -1000,16 +1040,16 @@
         },
         {
             "name": "tightenco/collect",
-            "version": "v5.8.35",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tightenco/collect.git",
-                "reference": "c93a7039e6207ad533a09109838fe80933fcc72c"
+                "reference": "7f3f798cb71aa509f5d6e0d1b8f5f4ae0e510869"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tightenco/collect/zipball/c93a7039e6207ad533a09109838fe80933fcc72c",
-                "reference": "c93a7039e6207ad533a09109838fe80933fcc72c",
+                "url": "https://api.github.com/repos/tightenco/collect/zipball/7f3f798cb71aa509f5d6e0d1b8f5f4ae0e510869",
+                "reference": "7f3f798cb71aa509f5d6e0d1b8f5f4ae0e510869",
                 "shasum": ""
             },
             "require": {
@@ -1018,7 +1058,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
-                "nesbot/carbon": "^1.26.3",
+                "nesbot/carbon": "^2.23.0",
                 "phpunit/phpunit": "^7.0"
             },
             "type": "library",
@@ -1038,7 +1078,7 @@
             "authors": [
                 {
                     "name": "Taylor Otwell",
-                    "email": "taylorotwell@gmail.com"
+                    "email": "taylor@laravel.com"
                 }
             ],
             "description": "Collect - Illuminate Collections as a separate package.",
@@ -1046,7 +1086,7 @@
                 "collection",
                 "laravel"
             ],
-            "time": "2019-09-17T18:57:01+00:00"
+            "time": "2019-10-05T20:15:22+00:00"
         }
     ],
     "packages-dev": [
