@@ -32,23 +32,6 @@ function get_directory_entry($id)
     $structure = NF::$site->structures[$entrydata['directory_id']];
 
     if ($entrydata && $entrydata['published']) {
-      foreach ($entrydata as $alias => $data) {
-        if ($structure['fields'][$alias]['type'] == 'image') {
-          $entrydata[$alias] = $data['path'];
-        }
-
-        if ($structure['fields'][$alias]['type'] == 'gallery') {
-          $return = [];
-          if (count($data)) {
-            foreach ($data as $item) {
-              $item['image'] = $item['path'];
-              $return[] = $item;
-            }
-            $entrydata[$alias] = $return;
-          }
-        }
-      }
-
       if ($revision_override) {
         return $entrydata;
       }
