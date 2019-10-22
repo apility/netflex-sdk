@@ -196,10 +196,6 @@ class ElasticSearch
    */
   public function execute()
   {
-    if (!get_setting('use_elasticsearch')) {
-      throw new Exception('ElasticSearch is not enabled for this site');
-    }
-
     $this->buildQuery();
 
     NF::debug(json_encode($this->query, JSON_PRETTY_PRINT), 'ElasticSearch');
@@ -220,7 +216,7 @@ class ElasticSearch
       NF::debug($ex, 'ElasticSearch');
       throw new Exception(json_encode($this->query));
     }
-    
+
     return $this;
   }
 
