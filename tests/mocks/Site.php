@@ -39,4 +39,8 @@ class MockSite {
   public function mockTemplate () {
 
   }
+
+  public function loadLabels () {
+    // This function needs to exist for the test not to fail. We do not actually load labels from the API when running the tests, so this function does nothing.
+  }
 }
