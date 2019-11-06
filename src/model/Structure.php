@@ -449,17 +449,20 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
 
   public static function generateObject($data)
   {
-    global $previewmode;
-    if (isset($previewmode)) {
-      $r = new static($data);
-      if (array_key_exists('revision', $_GET) && array_key_exists('id', $_GET) && $r->id == $_GET['id']) {
-        return $r->revisions[$_GET['revision']];
-      } else {
-        return $r;
+    global $_mode;
+    global $entry_override;
+    global $revision_override;
+
+    if (isset($_mode) && $_mode) {
+      $revision = new static($data);
+      if ($revision->id == $entry_override) {
+        return $revision->revisions[$revision_override];
       }
-    } else {
-      return new static($data);
+
+      return $revision;
     }
+
+    return new static($data);
   }
 
   private static function bootUnlessBooted()
