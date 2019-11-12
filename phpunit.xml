@@ -40,5 +40,10 @@
         tests/TestSuites/ElasticSearch
       </directory>
     </testsuite>
+    <testsuite name="NF">
+      <directory suffix=".test.php">
+        tests/TestSuites/NF
+      </directory>
+    </testsuite>
   </testsuites>
 </phpunit>

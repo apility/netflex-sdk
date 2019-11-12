@@ -9,3 +9,5 @@
 
 ### PHP Unit ###
 .phpunit.result.cache
+tests/mocks/project/storage
+tests/mocks/project/store
