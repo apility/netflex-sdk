@@ -1,5 +1,6 @@
 <?php
 
+use Apility\WebpackAssets\WebpackAssets;
 use Netflex\Site\JWT;
 use GuzzleHttp\Client;
 use Netflex\Site\Site;
@@ -62,6 +63,9 @@ class NF
   /** @var string */
   public static $site_root;
 
+  /** @var WebpackAssets */
+  public static $webpackAssets;
+
   /**
    * Initializes a new instance
    *
@@ -113,6 +117,20 @@ class NF
     self::$commerce = new Commerce();
 
     self::$search = new ElasticSearch();
+
+    self::setWebpackAssets();
+  }
+
+  /** Sets webpackAssets */
+  public static function setWebpackAssets () {
+    self::$webpackAssets = isset(self::$config['webpackManifest'])
+      ? new WebpackAssets(self::$config['webpackManifest'], [
+        'defaultEntrypoint' => 'app',
+        'preload' => true,
+      ])
+      : null;
+
+    return self::$webpackAssets;
   }
 
   /**
