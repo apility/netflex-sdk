@@ -23,6 +23,8 @@ if (strpos($url, '_/') === 0) {
     $payload = NF::$jwt->decode($token);
     $controller = NF::nfPath('pagefinder/' . $payload->scope . '_' . $payload->relation . '.php');
 
+    NF::setWebpackAssets();
+
     if (file_exists($controller)) {
       require $controller;
       die();
@@ -32,6 +34,8 @@ if (strpos($url, '_/') === 0) {
   http_response_code(401);
   die('Invalid or expired token');
 }
+
+NF::setWebpackAssets();
 
 if ($url == '') {
   $url = 'index';
