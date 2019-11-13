@@ -117,16 +117,19 @@ class NF
     self::$commerce = new Commerce();
 
     self::$search = new ElasticSearch();
-
-    self::setWebpackAssets();
   }
 
   /** Sets webpackAssets */
   public static function setWebpackAssets () {
+    global $payload;
+
+    $basePath = $payload->domain ?? null;
+
     self::$webpackAssets = isset(self::$config['webpackManifest'])
       ? new WebpackAssets(self::$config['webpackManifest'], [
         'defaultEntrypoint' => 'app',
         'preload' => true,
+        'basePath' => $basePath,
       ])
       : null;
 
