@@ -93,25 +93,32 @@ function get_full_content_array($page_id)
     $contentItems = json_decode(NF::$capi->get('builder/pages/' . $page_id . '/content')->getBody(), true);
 
     foreach ($contentItems as $item) {
-      if (isset($content[$item['area']])) {
-        $existing = $content[$item['area']];
-        $content[$item['area']] = null;
-        $content[$item['area']] = [];
-        $content[$item['area']][] = $existing;
 
-        if (!isset($content[$item['area']][0])) {
-          $existing = $content[$item['area']];
-          $content[$item['area']] = null;
-          $content[$item['area']] = [];
-          $content[$item['area']][] = $existing;
+      if($item['published'] === '1') {
+        
+        if (isset($content[$item['area']])) {
+
+          if (!isset($content[$item['area']][0])) {
+
+            $existing = $content[$item['area']];
+            $content[$item['area']] = null;
+            $content[$item['area']] = [];
+            $content[$item['area']][] = $existing;
+
+          }
+
+          $content[$item['area']][] = $item;
+
+        } else {
+
+          $content[$item['area']] = $item;
+          
         }
 
-        $content[$item['area']][] = $item;
-      } else {
-        $content[$item['area']] = $item;
+        $content['id_' . $item['id']] = $item;
+
       }
 
-      $content['id_' . $item['id']] = $item;
     }
 
     NF::$cache->save('page/' . $page_id, $content);
