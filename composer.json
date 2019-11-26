@@ -64,10 +64,28 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^8.1",
-    "spatie/phpunit-snapshot-assertions": "^2.1"
+    "spatie/phpunit-snapshot-assertions": "^2.1",
+    "friendsofphp/php-cs-fixer": "^2.16",
+    "brainmaestro/composer-git-hooks": "^2.8"
   },
   "scripts": {
+    "cghooks": "vendor/bin/cghooks",
     "tests": "vendor/bin/phpunit --testdox --colors=always",
-    "tests:update-snapshots": "vendor/bin/phpunit --colors=always -d --update-snapshots"
+    "tests:update-snapshots": "vendor/bin/phpunit --colors=always -d --update-snapshots",
+    "post-install-cmd": "cghooks add --ignore-lock",
+    "post-update-cmd": "cghooks update"
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": [
+        "echo committing as $(git config user.name)",
+        "vendor/bin/php-cs-fixer fix src/ --rules=@PSR2"
+      ],
+      "pre-push": [
+        "vendor/bin/php-cs-fixer fix --dry-run src/ --rules@PSR2",
+        "composer run-script tests"
+      ],
+      "post-merge": "composer install"
+    }
   }
 }

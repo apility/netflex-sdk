@@ -11,3 +11,10 @@
 .phpunit.result.cache
 tests/mocks/project/storage
 tests/mocks/project/store
+
+### PHP-CS
+.php_cs.cache
+
+### Composer GIT hooks
+cghooks.lock
+
