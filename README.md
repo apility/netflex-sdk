@@ -32,6 +32,16 @@ require_once(Netflex\SDK::bootstrap);
 composer run-script tests
 ```
 
+## Updating snapshots
+
+When an existing snapshot test has been updated, or its behaviour has been modified, the snapshot will have to be updated to prevent the tests from failing.
+
+To update the snapshots, run the following command.
+
+```bash
+composer run-script tests:update-snapshots
+```
+
 <hr>
 
 Copyright &copy; 2019 **[Apility AS](https://apility.no)**
