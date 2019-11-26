@@ -6,7 +6,7 @@ header('Content-Type: text/plain');
 #The content of this file can be modified in the settings panel.
 User-agent: *
 <?php if (getenv('ENV') !== master) {
-  echo "Disallow: /";
+    echo "Disallow: /";
 } else {
-  echo "Allow: /";
+    echo "Allow: /";
 } ?>

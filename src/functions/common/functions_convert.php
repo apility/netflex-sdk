@@ -9,12 +9,12 @@
  */
 function convert_datetime($date, $format)
 {
-  if ($date != 0) {
-    $date = new DateTime($date);
-    return $date->format($format);
-  }
+    if ($date != 0) {
+        $date = new DateTime($date);
+        return $date->format($format);
+    }
 
-  return null;
+    return null;
 }
 
 /**
@@ -29,11 +29,12 @@ function convert_datetime($date, $format)
  */
 function convert_to_safe_string($value, $type, $definedValue = "", $undefinedValue = "")
 {
-  trigger_error('convert_to_safe_string is deprecated', E_USER_DEPRECATED);
+    trigger_error('convert_to_safe_string is deprecated', E_USER_DEPRECATED);
 
-  switch ($type) {
+    switch ($type) {
     case 'text':
       $value = ($value != '') ? "'" . $value . "'" : 'null';
+      // no break
     case 'str':
       $value = strip_tags($value);
       break;
@@ -53,7 +54,7 @@ function convert_to_safe_string($value, $type, $definedValue = "", $undefinedVal
       break;
   }
 
-  return $value;
+    return $value;
 }
 
 /**
@@ -64,7 +65,7 @@ function convert_to_safe_string($value, $type, $definedValue = "", $undefinedVal
  */
 function convert_to_nor_monthname($id)
 {
-  $months = [
+    $months = [
     '01' => 'Januar',
     '02' => 'Februar',
     '03' => 'Mars',
@@ -79,5 +80,5 @@ function convert_to_nor_monthname($id)
     '12' => 'Desember',
   ];
 
-  return $months[$id];
+    return $months[$id];
 }

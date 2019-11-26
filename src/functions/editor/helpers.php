@@ -10,10 +10,10 @@
  */
 function insertContentIfNotExists($area, $content)
 {
-  if (!NF::$site->content[$area]) {
-    $response = json_decode(NF::$capi->post('builder/content', ['json' => $content])->getBody());
-    NF::$site->content[$area] = json_decode(NF::$capi->get('builder/content/' . $response->content_id)->getBody(), true);
-  }
+    if (!NF::$site->content[$area]) {
+        $response = json_decode(NF::$capi->post('builder/content', ['json' => $content])->getBody());
+        NF::$site->content[$area] = json_decode(NF::$capi->get('builder/content/' . $response->content_id)->getBody(), true);
+    }
 
-  return NF::$site->content[$area];
+    return NF::$site->content[$area];
 }

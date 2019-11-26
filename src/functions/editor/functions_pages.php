@@ -9,10 +9,10 @@
  */
 function get_page_content_file($area, $column)
 {
-  global $page_id;
-  global $revision;
+    global $page_id;
+    global $revision;
 
-  $content = insertContentIfNotExists($area, [
+    $content = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -20,7 +20,7 @@ function get_page_content_file($area, $column)
     'type' => $column
   ]);
 
-  return <<<HTML
+    return <<<HTML
 https://{ get_setting('site_cdn_direct') }/{ $content[$column] }
 HTML;
 }
@@ -36,10 +36,10 @@ HTML;
  */
 function get_page_content_mediafile($area, $column, $dimensions, $compression)
 {
-  global $page_id;
-  global $revision;
+    global $page_id;
+    global $revision;
 
-  $content = insertContentIfNotExists($area, [
+    $content = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -47,7 +47,7 @@ function get_page_content_mediafile($area, $column, $dimensions, $compression)
     'type' => $column
   ]);
 
-  return 'https://' . get_setting('site_cdn_direct') . '/media/' . $compression . '/' . $dimensions . '/' . $content[$column];
+    return 'https://' . get_setting('site_cdn_direct') . '/media/' . $compression . '/' . $dimensions . '/' . $content[$column];
 }
 
 /**
@@ -59,10 +59,10 @@ function get_page_content_mediafile($area, $column, $dimensions, $compression)
  */
 function get_page_content_string($area, $column)
 {
-  global $page_id;
-  global $revision;
+    global $page_id;
+    global $revision;
 
-  $content = insertContentIfNotExists($area, [
+    $content = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -70,7 +70,7 @@ function get_page_content_string($area, $column)
     'type' => $column
   ]);
 
-  return $content[$column];
+    return $content[$column];
 }
 
 /**
@@ -84,11 +84,11 @@ function get_page_content_string($area, $column)
  */
 function get_page_content($area, $column = 'html', $tag = 'div', $class = null)
 {
-  global $page_id;
-  global $revision;
-  global $_mode;
+    global $page_id;
+    global $revision;
+    global $_mode;
 
-  $content = insertContentIfNotExists($area, [
+    $content = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -96,11 +96,11 @@ function get_page_content($area, $column = 'html', $tag = 'div', $class = null)
     'type' => $column
   ]);
 
-  if ($_mode === 'preview') {
-    return $content[$column];
-  }
+    if ($_mode === 'preview') {
+        return $content[$column];
+    }
 
-  return <<<HTML
+    return <<<HTML
     <$tag
       id="e-{$content['id']}-$column"
       class="$class"
@@ -124,13 +124,13 @@ HTML;
  */
 function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = null)
 {
-  global $_mode;
+    global $_mode;
 
-  if ($_mode === 'preview') {
-    return "<$tag class=\"$class\">" . get_page_content($area, $column) . "</$tag>";
-  }
+    if ($_mode === 'preview') {
+        return "<$tag class=\"$class\">" . get_page_content($area, $column) . "</$tag>";
+    }
 
-  return get_page_content($area, $column, $tag, $class);
+    return get_page_content($area, $column, $tag, $class);
 }
 
 /**
@@ -146,10 +146,10 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  */
 function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null, $resolutions = [])
 {
-  global $page_id;
-  global $revision;
+    global $page_id;
+    global $revision;
 
-  $image = insertContentIfNotExists($area, [
+    $image = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -157,7 +157,7 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
     'type' => $column
   ]);
 
-  $alt = insertContentIfNotExists($area, [
+    $alt = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -165,7 +165,7 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
     'type' => 'alt'
   ])['alt'];
 
-  $title = insertContentIfNotExists($area, [
+    $title = insertContentIfNotExists($area, [
     'relation' => 'page',
     'relation_id' => $page_id,
     'revision' => $revision,
@@ -173,18 +173,18 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
     'type' => 'title'
   ])['title'];
 
-  $dimensions = $compression === 'o' ? '' : $dimensions;
+    $dimensions = $compression === 'o' ? '' : $dimensions;
 
-  $src = 'https://placehold.it/' . $dimensions;
+    $src = 'https://placehold.it/' . $dimensions;
 
-  if ($image[$column]) {
-    $domain = get_setting('site_cdn_protocol') . '://' . get_setting('site_cdn_url');
-    $fill = ($compression === 'fill' ? ('/' . $fill) : '');
-    $url = '/media/' . $compression . '/' . $dimensions . $fill . '/' . $image[$column];
-    $src = $domain . $url;
-  }
+    if ($image[$column]) {
+        $domain = get_setting('site_cdn_protocol') . '://' . get_setting('site_cdn_url');
+        $fill = ($compression === 'fill' ? ('/' . $fill) : '');
+        $url = '/media/' . $compression . '/' . $dimensions . $fill . '/' . $image[$column];
+        $src = $domain . $url;
+    }
 
-  return <<<HTML
+    return <<<HTML
     <picture
       id="e-{$image['id']}-$column"
       class="$picture_class $class find-image"

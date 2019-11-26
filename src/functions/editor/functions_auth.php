@@ -10,7 +10,7 @@
  */
 function check_login($username, $password, $groups = null, $field = null)
 {
-  return true;
+    return true;
 }
 
 /**
@@ -22,5 +22,5 @@ function check_login($username, $password, $groups = null, $field = null)
  */
 function check_access($username, $groups)
 {
-  return true;
+    return true;
 }

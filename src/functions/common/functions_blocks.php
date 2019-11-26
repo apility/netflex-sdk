@@ -15,34 +15,34 @@ $edit_areas = [];
  */
 function get_page_blocks($area, $vars = null)
 {
-  global $blockhash;
-  global $site;
-  global $page;
-  global $url_asset;
+    global $blockhash;
+    global $site;
+    global $page;
+    global $url_asset;
 
-  NF::debug($area, 'area');
-  $content = isset(NF::$site->content[$area]) ? NF::$site->content[$area] : null;
+    NF::debug($area, 'area');
+    $content = isset(NF::$site->content[$area]) ? NF::$site->content[$area] : null;
 
-  if (is_array($vars) === true) {
-    extract($vars, EXTR_SKIP);
-  }
-
-  if (empty($content) == false) {
-    if (isset($content[0]) == false) {
-      $content = [$content];
+    if (is_array($vars) === true) {
+        extract($vars, EXTR_SKIP);
     }
 
-    foreach ($content as $section) {
-      $block = $section['text'];
-      $alias = NF::$site->templates['components'][$block]['alias'];
-      $blockhash = $section['title'];
-      NF::debug('components/' . $alias, 'component');
-      require(NF::$site_root . 'components/' . $alias . '.php');
-      NF::debug('components/' . $alias, '!component');
-    }
-  }
+    if (empty($content) == false) {
+        if (isset($content[0]) == false) {
+            $content = [$content];
+        }
 
-  NF::debug($area, '!area');
+        foreach ($content as $section) {
+            $block = $section['text'];
+            $alias = NF::$site->templates['components'][$block]['alias'];
+            $blockhash = $section['title'];
+            NF::debug('components/' . $alias, 'component');
+            require(NF::$site_root . 'components/' . $alias . '.php');
+            NF::debug('components/' . $alias, '!component');
+        }
+    }
+
+    NF::debug($area, '!area');
 }
 
 /**
@@ -55,43 +55,42 @@ function get_page_blocks($area, $vars = null)
  */
 function display_page_blocks($page_id, $area, $vars = null)
 {
-  global $blockhash;
-  global $site;
-  global $page;
-  global $url_asset;
+    global $blockhash;
+    global $site;
+    global $page;
+    global $url_asset;
 
-  NF::debug($area, 'copy_area');
+    NF::debug($area, 'copy_area');
 
 
-  $content = get_full_content_array($page_id);
-  $content = isset($content[$area]) ? $content[$area] : null;
+    $content = get_full_content_array($page_id);
+    $content = isset($content[$area]) ? $content[$area] : null;
 
-  if (is_array($vars) === true) {
-    extract($vars, EXTR_SKIP);
-  }
-
-  if (empty($content) == false) {
-
-    if (isset($content[0]) == false) {
-      $content = [$content];
+    if (is_array($vars) === true) {
+        extract($vars, EXTR_SKIP);
     }
 
-    $current_page_content = NF::$site->content;
-    NF::$site->content = get_full_content_array($page_id);
+    if (empty($content) == false) {
+        if (isset($content[0]) == false) {
+            $content = [$content];
+        }
 
-    foreach ($content as $section) {
-      $block = $section['text'];
-      $alias = NF::$site->templates['components'][$block]['alias'];
-      $blockhash = $section['title'];
-      NF::debug('components/' . $alias, 'component');
+        $current_page_content = NF::$site->content;
+        NF::$site->content = get_full_content_array($page_id);
 
-      require(NF::$site_root . 'components/' . $alias . '.php');
-      NF::debug('components/' . $alias, '!component');
+        foreach ($content as $section) {
+            $block = $section['text'];
+            $alias = NF::$site->templates['components'][$block]['alias'];
+            $blockhash = $section['title'];
+            NF::debug('components/' . $alias, 'component');
+
+            require(NF::$site_root . 'components/' . $alias . '.php');
+            NF::debug('components/' . $alias, '!component');
+        }
+
+        NF::$site->content = $current_page_content;
     }
-
-    NF::$site->content = $current_page_content;
-  }
-  NF::debug($area, '!copy_area');
+    NF::debug($area, '!copy_area');
 }
 
 /**
@@ -102,9 +101,9 @@ function display_page_blocks($page_id, $area, $vars = null)
  */
 function get_page_blocks_count($area)
 {
-  global $site;
-  $blocks = NF::$site->content[$area] ?? [];
-  return count($blocks);
+    global $site;
+    $blocks = NF::$site->content[$area] ?? [];
+    return count($blocks);
 }
 
 /**
@@ -117,15 +116,15 @@ function get_page_blocks_count($area)
  */
 function get_block_content($area, $tag = null, $class = null)
 {
-  global $blockhash;
+    global $blockhash;
 
-  $area = $area . '_' . $blockhash;
+    $area = $area . '_' . $blockhash;
 
-  if ($tag) {
-    return get_page_content_wrap($area, 'html', $tag, $class);
-  }
+    if ($tag) {
+        return get_page_content_wrap($area, 'html', $tag, $class);
+    }
 
-  return get_page_content($area);
+    return get_page_content($area);
 }
 
 /**
@@ -138,7 +137,7 @@ function get_block_content($area, $tag = null, $class = null)
  */
 function get_block_content_wrap($area, $tag, $class = null)
 {
-  return get_block_content($area, $tag, $class);
+    return get_block_content($area, $tag, $class);
 }
 
 /**
@@ -155,18 +154,18 @@ function get_block_content_wrap($area, $tag, $class = null)
  */
 function get_block_content_image($area, $dimensions, $compression_type, $class = null, $fill = null, $picture_class = null, $resolutions = [])
 {
-  global $blockhash;
+    global $blockhash;
 
-  if ($compression_type === 'fill') {
-    $fill = $fill ?? '255,255,255';
-  }
+    if ($compression_type === 'fill') {
+        $fill = $fill ?? '255,255,255';
+    }
 
-  $area = $area . '_' . $blockhash;
-  $image = get_page_content_string($area, 'image');
-  $alt = get_page_content_string($area, 'description');
-  $title = get_page_content_string($area, 'title');
+    $area = $area . '_' . $blockhash;
+    $image = get_page_content_string($area, 'image');
+    $alt = get_page_content_string($area, 'description');
+    $title = get_page_content_string($area, 'title');
 
-  return get_page_content_image($area, 'image', $dimensions, $compression_type, $class, $fill, $picture_class, $resolutions);
+    return get_page_content_image($area, 'image', $dimensions, $compression_type, $class, $fill, $picture_class, $resolutions);
 }
 
 /**
@@ -177,31 +176,30 @@ function get_block_content_image($area, $dimensions, $compression_type, $class =
  */
 function get_block_content_list($settings)
 {
-  global $blockhash;
-  global $site;
+    global $blockhash;
+    global $site;
 
-  $returnfield = $settings['content_field'];
-  $area = $settings['alias'] . '_' . $blockhash;
-  if (isset(NF::$site->content[$area])) {
-    $content = NF::$site->content[$area];
-  } else {
-    $content = [];
-  }
-
-  if (empty($content) == false) {
-
-    $items = [];
-
-    if (isset($content[0]) == false) {
-      $items[] = $content[$returnfield];
+    $returnfield = $settings['content_field'];
+    $area = $settings['alias'] . '_' . $blockhash;
+    if (isset(NF::$site->content[$area])) {
+        $content = NF::$site->content[$area];
     } else {
-      foreach ($content as $item) {
-        $items[] = $item[$returnfield];
-      }
+        $content = [];
     }
 
-    return $items;
-  }
+    if (empty($content) == false) {
+        $items = [];
+
+        if (isset($content[0]) == false) {
+            $items[] = $content[$returnfield];
+        } else {
+            foreach ($content as $item) {
+                $items[] = $item[$returnfield];
+            }
+        }
+
+        return $items;
+    }
 }
 
 /**
@@ -212,15 +210,15 @@ function get_block_content_list($settings)
  */
 function get_block_content_string($settings)
 {
-  global $blockhash;
+    global $blockhash;
 
-  $area = $settings['alias'] . '_' . $blockhash;
-  $settings['alias'] = $area;
-  $returnfield = $settings['content_field'];
+    $area = $settings['alias'] . '_' . $blockhash;
+    $settings['alias'] = $area;
+    $returnfield = $settings['content_field'];
 
-  NF::debug($area, 'get_block_content_string');
-  NF::debug($returnfield, 'get_block_content_string');
-  NF::debug(get_page_content_string($area, $returnfield), 'get_block_content_string');
+    NF::debug($area, 'get_block_content_string');
+    NF::debug($returnfield, 'get_block_content_string');
+    NF::debug(get_page_content_string($area, $returnfield), 'get_block_content_string');
 
-  return get_page_content_string($area, $returnfield);
+    return get_page_content_string($area, $returnfield);
 }

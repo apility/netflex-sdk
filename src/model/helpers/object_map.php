@@ -2,11 +2,11 @@
 
 function object_map($object, $callback)
 {
-  $mapped = [];
+    $mapped = [];
 
-  foreach ($object as $key => $value) {
-    $mapped[$key] = $callback($key, $value);
-  }
+    foreach ($object as $key => $value) {
+        $mapped[$key] = $callback($key, $value);
+    }
 
-  return (object)$mapped;
+    return (object)$mapped;
 }

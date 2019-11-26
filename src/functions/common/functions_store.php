@@ -7,7 +7,7 @@
  */
 function get_order_id()
 {
-  return get_order_id_from_secret(get_order_secret());
+    return get_order_id_from_secret(get_order_secret());
 }
 
 /**
@@ -17,7 +17,7 @@ function get_order_id()
  */
 function get_order_secret()
 {
-  return $_SESSION['netflex_cart'] ?? $_COOKIE['netflex_cart'] ?? null;
+    return $_SESSION['netflex_cart'] ?? $_COOKIE['netflex_cart'] ?? null;
 }
 
 /**
@@ -28,7 +28,7 @@ function get_order_secret()
  */
 function get_order_id_from_secret($secret)
 {
-  return NF::$commerce->get_order_from_secret($secret);
+    return NF::$commerce->get_order_from_secret($secret);
 }
 
 /**
@@ -39,7 +39,7 @@ function get_order_id_from_secret($secret)
  */
 function get_order($id)
 {
-  return NF::$commerce->get_order($id);
+    return NF::$commerce->get_order($id);
 }
 
 /**
@@ -50,9 +50,9 @@ function get_order($id)
  */
 function in_stock()
 {
-  trigger_error('in_stock is deprecated', E_USER_DEPRECATED);
+    trigger_error('in_stock is deprecated', E_USER_DEPRECATED);
 
-  return 1;
+    return 1;
 }
 
 /**
@@ -63,7 +63,7 @@ function in_stock()
  */
 function reset_order_cache($order_id)
 {
-  NF::$cache->delete("order/$order_id");
+    NF::$cache->delete("order/$order_id");
 }
 
 /**
@@ -74,8 +74,8 @@ function reset_order_cache($order_id)
  */
 function get_cart_entries_num($order_id)
 {
-  $order = get_order($order_id);
-  return $order['cart']['count'];
+    $order = get_order($order_id);
+    return $order['cart']['count'];
 }
 
 /**
@@ -86,8 +86,8 @@ function get_cart_entries_num($order_id)
  */
 function get_cart_entries($order_id)
 {
-  $order = get_order($order_id);
-  return $order['cart']['items'];
+    $order = get_order($order_id);
+    return $order['cart']['items'];
 }
 
 /**
@@ -98,7 +98,7 @@ function get_cart_entries($order_id)
  */
 function get_order_data($order_id)
 {
-  return get_order($order_id);
+    return get_order($order_id);
 }
 
 /**
@@ -109,8 +109,8 @@ function get_order_data($order_id)
  */
 function get_payment_data($order_id)
 {
-  $order = get_order($order_id);
-  return $order['payment'];
+    $order = get_order($order_id);
+    return $order['payment'];
 }
 
 /**
@@ -121,8 +121,8 @@ function get_payment_data($order_id)
  */
 function get_order_reciept_id($order_id)
 {
-  $order = get_order($order_id);
-  return $order['order_receipt_id'];
+    $order = get_order($order_id);
+    return $order['order_receipt_id'];
 }
 
 /**
@@ -133,8 +133,8 @@ function get_order_reciept_id($order_id)
  */
 function get_custom_order_data($order_id)
 {
-  $order = get_order($order_id);
-  return $order['data'];
+    $order = get_order($order_id);
+    return $order['data'];
 }
 
 /**
@@ -145,8 +145,8 @@ function get_custom_order_data($order_id)
  */
 function get_checkout_data($order_id)
 {
-  $order = get_order($order_id);
-  return $order['checkout'];
+    $order = get_order($order_id);
+    return $order['checkout'];
 }
 
 /**
@@ -161,7 +161,7 @@ function get_checkout_data($order_id)
  */
 function add_to_cart($order_id, $entry_id, $variant_id, $no_of_entries = 1, $entries_comments = null)
 {
-  return NF::$commerce->cart_add([
+    return NF::$commerce->cart_add([
     'entry_id' => $entry_id,
     'variant_id' => $variant_id,
     'no_of_entries' => $no_of_entries,
@@ -177,7 +177,7 @@ function add_to_cart($order_id, $entry_id, $variant_id, $no_of_entries = 1, $ent
  */
 function get_customer_orders($customer_id)
 {
-  return NF::$commerce->order_get_customer_orders($customer_id);
+    return NF::$commerce->order_get_customer_orders($customer_id);
 }
 
 /**
@@ -188,10 +188,10 @@ function get_customer_orders($customer_id)
  */
 function start_checkout($order_id)
 {
-  $user_ip = get_client_ip();
-  $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    $user_ip = get_client_ip();
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
-  NF::$commerce->order_checkout([
+    NF::$commerce->order_checkout([
     'user_agent' => $user_agent,
     'ip' => $user_ip,
     'checkout_start' => date('Y-m-d H:i:s')

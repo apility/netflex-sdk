@@ -9,21 +9,21 @@
  */
 function set_edit_btn($settings = [], $position = 'topright')
 {
-  global $blockhash;
-  global $page_id;
-  global $_mode;
+    global $blockhash;
+    global $page_id;
+    global $_mode;
 
-  if ($_mode !== 'preview') {
-    if (!is_null($settings['alias'])) {
-      $settings['alias'] = $settings['alias'] . '_' . $blockhash;
-      $settings['max-items'] = $settings['max-items'] ?? 99999;
-      $position = $position ?? 'topright';
-      $config = $settings['config'] ? base64_encode(serialize($settings['config'])) : null;
-      $class = strip_tags($settings['class']);
-      $style = strip_tags($settings['style']);
-      $btntitle = $settings['label'] ?? $settings['name'];
+    if ($_mode !== 'preview') {
+        if (!is_null($settings['alias'])) {
+            $settings['alias'] = $settings['alias'] . '_' . $blockhash;
+            $settings['max-items'] = $settings['max-items'] ?? 99999;
+            $position = $position ?? 'topright';
+            $config = $settings['config'] ? base64_encode(serialize($settings['config'])) : null;
+            $class = strip_tags($settings['class']);
+            $style = strip_tags($settings['style']);
+            $btntitle = $settings['label'] ?? $settings['name'];
 
-      return <<<HTML
+            return <<<HTML
         <a
           href="#"
           class="netflex-content-settings-btn netflex-content-btn-pos-{$position} {$class}"
@@ -40,6 +40,6 @@ function set_edit_btn($settings = [], $position = 'topright')
           <span class="{$settings['icon']}"></span> {$btntitle}
         </a>
 HTML;
+        }
     }
-  }
 }

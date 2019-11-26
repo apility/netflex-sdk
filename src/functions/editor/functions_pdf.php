@@ -7,5 +7,5 @@
  */
 function generate_pdf($url, $options = [])
 {
-  die('generate_pdf() doesnt work in preview or edit mode');
+    die('generate_pdf() doesnt work in preview or edit mode');
 }

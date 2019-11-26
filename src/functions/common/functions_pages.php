@@ -9,35 +9,35 @@
  */
 function get_page_content_list($area, $column = null)
 {
-  global $site;
+    global $site;
 
-  $content = NF::$site->content[$area];
+    $content = NF::$site->content[$area];
 
-  if ($content) {
-    if ($column) {
-      if (isset($content[0])) {
-        $items = [];
-        foreach ($content as $item) {
-          $items[] = $item[$column];
+    if ($content) {
+        if ($column) {
+            if (isset($content[0])) {
+                $items = [];
+                foreach ($content as $item) {
+                    $items[] = $item[$column];
+                }
+            } else {
+                $items[] = $content[$column];
+            }
+        } else {
+            if (isset($content[0])) {
+                $items = [];
+                foreach ($content as $item) {
+                    $items[] = $item;
+                }
+            } else {
+                $items[] = $content;
+            }
         }
-      } else {
-        $items[] = $content[$column];
-      }
-    } else {
-      if (isset($content[0])) {
-        $items = [];
-        foreach ($content as $item) {
-          $items[] = $item;
-        }
-      } else {
-        $items[] = $content;
-      }
+
+        return $items;
     }
 
-    return $items;
-  }
-
-  return null;
+    return null;
 }
 
 /**
@@ -50,15 +50,15 @@ function get_page_content_list($area, $column = null)
  */
 function get_display_content($relation_id, $area, $column)
 {
-  $content = json_decode(NF::$capi->get('builder/pages/' . $relation_id . '/content')->getBody(), true);
+    $content = json_decode(NF::$capi->get('builder/pages/' . $relation_id . '/content')->getBody(), true);
 
-  foreach ($content as $item) {
-    if ($item['area'] === $area) {
-      return $item[$column];
+    foreach ($content as $item) {
+        if ($item['area'] === $area) {
+            return $item[$column];
+        }
     }
-  }
 
-  return null;
+    return null;
 }
 
 /**
@@ -69,13 +69,13 @@ function get_display_content($relation_id, $area, $column)
  */
 function get_content_array($id)
 {
-  global $site;
+    global $site;
 
-  if (isset(NF::$site->content['id_' . $id])) {
-    return NF::$site->content['id_' . $id];
-  }
+    if (isset(NF::$site->content['id_' . $id])) {
+        return NF::$site->content['id_' . $id];
+    }
 
-  return null;
+    return null;
 }
 
 /**
@@ -86,34 +86,34 @@ function get_content_array($id)
  */
 function get_full_content_array($page_id)
 {
-  $content = NF::$cache->fetch("page/$page_id");
+    $content = NF::$cache->fetch("page/$page_id");
 
-  if (!$content) {
-    $content = [];
-    $contentItems = json_decode(NF::$capi->get('builder/pages/' . $page_id . '/content')->getBody(), true);
+    if (!$content) {
+        $content = [];
+        $contentItems = json_decode(NF::$capi->get('builder/pages/' . $page_id . '/content')->getBody(), true);
 
-    foreach ($contentItems as $item) {
-      if ($item['published']) {
-        if (isset($content[$item['area']])) {
-          if (!isset($content[$item['area']][0])) {
-            $existing = $content[$item['area']];
-            $content[$item['area']] = null;
-            $content[$item['area']] = [];
-            $content[$item['area']][] = $existing;
-          }
-          $content[$item['area']][] = $item;
-        } else {
-          $content[$item['area']] = $item;
+        foreach ($contentItems as $item) {
+            if ($item['published']) {
+                if (isset($content[$item['area']])) {
+                    if (!isset($content[$item['area']][0])) {
+                        $existing = $content[$item['area']];
+                        $content[$item['area']] = null;
+                        $content[$item['area']] = [];
+                        $content[$item['area']][] = $existing;
+                    }
+                    $content[$item['area']][] = $item;
+                } else {
+                    $content[$item['area']] = $item;
+                }
+
+                $content['id_' . $item['id']] = $item;
+            }
         }
 
-        $content['id_' . $item['id']] = $item;
-      }
+        NF::$cache->save('page/' . $page_id, $content);
     }
 
-    NF::$cache->save('page/' . $page_id, $content);
-  }
-
-  return $content;
+    return $content;
 }
 
 /**
@@ -124,7 +124,7 @@ function get_full_content_array($page_id)
  */
 function get_page_name($id)
 {
-  return get_page_data($id, 'name');
+    return get_page_data($id, 'name');
 }
 
 /**
@@ -136,11 +136,11 @@ function get_page_name($id)
  */
 function get_page_data($id, $field = null)
 {
-  if ($field) {
-    return NF::$site->pages[$id][$field];
-  }
+    if ($field) {
+        return NF::$site->pages[$id][$field];
+    }
 
-  return NF::$site->pages[$id];
+    return NF::$site->pages[$id];
 }
 
 /**
@@ -151,5 +151,5 @@ function get_page_data($id, $field = null)
  */
 function get_page($id)
 {
-  return get_page_data($id);
+    return get_page_data($id);
 }

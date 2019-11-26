@@ -23,7 +23,7 @@ NF::$site->loadGlobals();
 $entry = json_decode(NF::$capi->get('builder/structures/entry/' . $entry_id . '/revision/' . $entry_revision)->getBody(), true);
 $structure = json_decode(NF::$capi->get('builder/structures/' . $entry['directory_id'] . '/basic')->getBody(), true);
 
-NF::$site->loadPage($structure['canonical_page_id'], NULL);
+NF::$site->loadPage($structure['canonical_page_id'], null);
 
 $page_id = $structure['canonical_page_id'];
 

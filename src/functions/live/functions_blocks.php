@@ -9,5 +9,5 @@
  */
 function set_edit_btn($settings = [], $position = null)
 {
-  return null;
+    return null;
 }

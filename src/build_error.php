@@ -12,22 +12,21 @@ $isAsset = $url == 'browserconfig.xml/' &&
   $url == 'apple-touch-icon-120x120.png/';
 
 if (!$isAsset) {
+    $logtype = 'page';
+    $loglink = strip_tags($url);
+    $logcode = 404;
+    $logref = 'none';
 
-  $logtype = 'page';
-  $loglink = strip_tags($url);
-  $logcode = 404;
-  $logref = 'none';
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $logref = strip_tags($_SERVER['HTTP_REFERER']);
+    }
 
-  if (isset($_SERVER['HTTP_REFERER'])) {
-    $logref = strip_tags($_SERVER['HTTP_REFERER']);
-  }
+    $logagent = strip_tags($_SERVER['HTTP_USER_AGENT']);
 
-  $logagent = strip_tags($_SERVER['HTTP_USER_AGENT']);
+    //Set header
+    http_response_code(404);
 
-  //Set header
-  http_response_code(404);
-
-  NF::$capi->post('errors', ['json' => [
+    NF::$capi->post('errors', ['json' => [
     'type' => 'page',
     'error_code' => '404',
     'item_identifier' => $loglink,
@@ -36,9 +35,9 @@ if (!$isAsset) {
     'agent' => $logagent
   ]]);
 
-  if (file_exists('files/404.php')) {
-    require('files/404.php');
-  } else { ?>
+    if (file_exists('files/404.php')) {
+        require('files/404.php');
+    } else { ?>
 <!DOCTYPE html>
 <html lang="en">
 

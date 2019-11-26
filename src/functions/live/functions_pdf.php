@@ -7,5 +7,5 @@
  */
 function generate_pdf($url, $options = [])
 {
-  \Netflex\Site\PDF::make($url, $options)->generate();
+    \Netflex\Site\PDF::make($url, $options)->generate();
 }

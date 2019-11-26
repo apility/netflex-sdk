@@ -8,13 +8,13 @@
  */
 function get_template_part($alias)
 {
-  global $page;
-  global $templatealias;
-  global $url_asset;
+    global $page;
+    global $templatealias;
+    global $url_asset;
 
-  NF::debug('templates/' . $templatealias . '/' . $alias, 'part');
-  require(NF::$site_root . '/templates/' . $templatealias . '/' . $alias . '.php');
-  NF::debug('templates/' . $templatealias . '/' . $alias, '!part');
+    NF::debug('templates/' . $templatealias . '/' . $alias, 'part');
+    require(NF::$site_root . '/templates/' . $templatealias . '/' . $alias . '.php');
+    NF::debug('templates/' . $templatealias . '/' . $alias, '!part');
 }
 
 /**
@@ -26,16 +26,16 @@ function get_template_part($alias)
  */
 function get_block($alias, $vars = [])
 {
-  global $page;
-  global $url_asset;
+    global $page;
+    global $url_asset;
 
-  if (is_array($vars)) {
-    extract($vars, EXTR_SKIP);
-  }
+    if (is_array($vars)) {
+        extract($vars, EXTR_SKIP);
+    }
 
-  NF::debug('blocks/' . $alias, 'block');
-  require(NF::$site_root . 'blocks/' . $alias . '.php');
-  NF::debug('blocks/' . $alias, '!block');
+    NF::debug('blocks/' . $alias, 'block');
+    require(NF::$site_root . 'blocks/' . $alias . '.php');
+    NF::debug('blocks/' . $alias, '!block');
 }
 
 /**
@@ -48,15 +48,15 @@ function get_block($alias, $vars = [])
  */
 function get_static_content($block, $area, $column)
 {
-  global $site;
-  global $current_date;
+    global $site;
+    global $current_date;
 
-  if (
+    if (
     isset(NF::$site->statics[$block][$area]) &&
     isset(NF::$site->statics[$block][$area][$column])
   ) {
-    return NF::$site->statics[$block][$area][$column];
-  }
+        return NF::$site->statics[$block][$area][$column];
+    }
 }
 
 /**
@@ -66,25 +66,25 @@ function get_static_content($block, $area, $column)
  */
 function get_meta_title()
 {
-  global $page;
-  global $addto_meta_title_start;
-  global $addto_meta_title_end;
-  global $force_meta_title;
+    global $page;
+    global $addto_meta_title_start;
+    global $addto_meta_title_end;
+    global $force_meta_title;
 
-  $page_id = $page['id'];
-  $global_meta = get_setting('site_meta_title');
+    $page_id = $page['id'];
+    $global_meta = get_setting('site_meta_title');
 
-  if ($page['title'] == null) {
-    $metatitle = $page['name'] . '' . $global_meta;
-  } else {
-    $metatitle = $page['title'];
-  }
+    if ($page['title'] == null) {
+        $metatitle = $page['name'] . '' . $global_meta;
+    } else {
+        $metatitle = $page['title'];
+    }
 
-  if ($force_meta_title != null) {
-    return $force_meta_title;
-  }
+    if ($force_meta_title != null) {
+        return $force_meta_title;
+    }
 
-  return $addto_meta_title_start . '' . $metatitle . '' . $addto_meta_title_end;
+    return $addto_meta_title_start . '' . $metatitle . '' . $addto_meta_title_end;
 }
 
 /**
@@ -94,22 +94,22 @@ function get_meta_title()
  */
 function get_meta_description()
 {
-  global $page;
-  global $force_meta_description;
+    global $page;
+    global $force_meta_description;
 
-  $global_desc = get_setting('site_meta_description');
+    $global_desc = get_setting('site_meta_description');
 
-  if ($page['description'] == null) {
-    $metadesc = $global_desc;
-  } else {
-    $metadesc = $page['description'];
-  }
+    if ($page['description'] == null) {
+        $metadesc = $global_desc;
+    } else {
+        $metadesc = $page['description'];
+    }
 
-  if ($force_meta_description != null) {
-    return $force_meta_description;
-  }
+    if ($force_meta_description != null) {
+        return $force_meta_description;
+    }
 
-  return $metadesc;
+    return $metadesc;
 }
 
 /**
@@ -119,22 +119,22 @@ function get_meta_description()
  */
 function get_meta_keywords()
 {
-  global $page;
-  global $force_meta_keywords;
+    global $page;
+    global $force_meta_keywords;
 
-  $global_key = get_setting('site_meta_keywords');
+    $global_key = get_setting('site_meta_keywords');
 
-  if ($page['keywords'] == null) {
-    $metakey = $global_key;
-  } else {
-    $metakey = $page['keywords'];
-  }
+    if ($page['keywords'] == null) {
+        $metakey = $global_key;
+    } else {
+        $metakey = $page['keywords'];
+    }
 
-  if ($force_meta_keywords != null) {
-    return $force_meta_keywords;
-  }
+    if ($force_meta_keywords != null) {
+        return $force_meta_keywords;
+    }
 
-  return $metakey;
+    return $metakey;
 }
 
 /**
@@ -144,22 +144,22 @@ function get_meta_keywords()
  */
 function get_meta_author()
 {
-  global $page;
-  global $force_meta_author;
+    global $page;
+    global $force_meta_author;
 
-  $global_author = get_setting('site_meta_author');
+    $global_author = get_setting('site_meta_author');
 
-  if ($page['author'] == null) {
-    $metaauthor = $global_author;
-  } else {
-    $metaauthor = $page['author'];
-  }
+    if ($page['author'] == null) {
+        $metaauthor = $global_author;
+    } else {
+        $metaauthor = $page['author'];
+    }
 
-  if ($force_meta_author != null) {
-    return $force_meta_author;
-  }
+    if ($force_meta_author != null) {
+        return $force_meta_author;
+    }
 
-  return $metaauthor;
+    return $metaauthor;
 }
 
 /**
@@ -169,11 +169,11 @@ function get_meta_author()
  */
 function get_body_class()
 {
-  global $page;
+    global $page;
 
-  if ($page['body_class']) {
-    return 'class="' . $page['body_class'] . '"';
-  }
+    if ($page['body_class']) {
+        return 'class="' . $page['body_class'] . '"';
+    }
 }
 
 /**
@@ -183,11 +183,11 @@ function get_body_class()
  */
 function get_codeinject_head()
 {
-  global $page;
+    global $page;
 
-  if ($page['add_to_head']) {
-    return $page['add_to_head'];
-  }
+    if ($page['add_to_head']) {
+        return $page['add_to_head'];
+    }
 }
 
 /**
@@ -197,11 +197,11 @@ function get_codeinject_head()
  */
 function get_codeinject_bodyclose()
 {
-  global $page;
+    global $page;
 
-  if ($page['add_to_bodyclose']) {
-    return $page['add_to_bodyclose'];
-  }
+    if ($page['add_to_bodyclose']) {
+        return $page['add_to_bodyclose'];
+    }
 }
 
 /**
@@ -212,14 +212,14 @@ function get_codeinject_bodyclose()
  */
 function get_asset($asset)
 {
-  global $_domain;
-  $hash = null;
+    global $_domain;
+    $hash = null;
 
-  if (isset(NF::$config['deploy']) && isset(NF::$config['deploy']['id'])) {
-    $hash = NF::$config['deploy']['id'];
-  }
+    if (isset(NF::$config['deploy']) && isset(NF::$config['deploy']['id'])) {
+        $hash = NF::$config['deploy']['id'];
+    }
 
-  $hash = $hash ?? time();
+    $hash = $hash ?? time();
 
-  return ($_domain ? $_domain : '') . '/assets/' . $asset . '?' . $hash;
+    return ($_domain ? $_domain : '') . '/assets/' . $asset . '?' . $hash;
 }

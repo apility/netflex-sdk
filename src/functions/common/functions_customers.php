@@ -9,19 +9,19 @@
  */
 function get_customer_data($username, $data = null)
 {
-  $data = strip_tags($data);
+    $data = strip_tags($data);
 
-  try {
-    $customer = json_decode(NF::$capi->get('relations/customers/customer/resolve/' . $username)->getBody(), true);
-  } catch (Exception $e) {
-    return null;
-  }
+    try {
+        $customer = json_decode(NF::$capi->get('relations/customers/customer/resolve/' . $username)->getBody(), true);
+    } catch (Exception $e) {
+        return null;
+    }
 
-  if ($data) {
-    return $customer[$data];
-  }
+    if ($data) {
+        return $customer[$data];
+    }
 
-  return $customer;
+    return $customer;
 }
 
 /**
@@ -32,9 +32,9 @@ function get_customer_data($username, $data = null)
  */
 function get_group_members($group)
 {
-  $request = NF::$capi->get('relations/customers/groups/' . $group . '/customers');
-  $members = json_decode($request->getBody(), true);
-  return $members;
+    $request = NF::$capi->get('relations/customers/groups/' . $group . '/customers');
+    $members = json_decode($request->getBody(), true);
+    return $members;
 }
 
 /**
@@ -46,8 +46,8 @@ function get_group_members($group)
  */
 function add_customer_to_group($customer, $group)
 {
-  $request = NF::$capi->put('relations/customers/customer/' . $customer, ['json' => ['groups' => $group]]);
-  return 1;
+    $request = NF::$capi->put('relations/customers/customer/' . $customer, ['json' => ['groups' => $group]]);
+    return 1;
 }
 
 /**
@@ -58,17 +58,17 @@ function add_customer_to_group($customer, $group)
  */
 function delete_customer($user_hash)
 {
-  if ($user_hash) {
-    // Check that customer exists
-    $customer = json_decode(NF::$capi->get('relations/customers/customer/hash/' . $user_hash)->getBody(), true);
+    if ($user_hash) {
+        // Check that customer exists
+        $customer = json_decode(NF::$capi->get('relations/customers/customer/hash/' . $user_hash)->getBody(), true);
 
-    if (isset($customer['id'])) {
-      NF::$capi->delete('relations/customers/customer/' . $customer['id']);
-      return true;
+        if (isset($customer['id'])) {
+            NF::$capi->delete('relations/customers/customer/' . $customer['id']);
+            return true;
+        }
     }
-  }
 
-  return false;
+    return false;
 }
 
 /**
@@ -79,14 +79,14 @@ function delete_customer($user_hash)
  */
 function get_customer($id)
 {
-  if ($id) {
-    $data = NF::$cache->fetch('customer/' . $id);
+    if ($id) {
+        $data = NF::$cache->fetch('customer/' . $id);
 
-    if ($data == null) {
-      $request = NF::$capi->get('relations/customers/customer/' . $id);
-      $data = json_decode($request->getBody(), true);
-      NF::$cache->save('customer/' . $id, $data);
+        if ($data == null) {
+            $request = NF::$capi->get('relations/customers/customer/' . $id);
+            $data = json_decode($request->getBody(), true);
+            NF::$cache->save('customer/' . $id, $data);
+        }
+        return $data;
     }
-    return $data;
-  }
 }

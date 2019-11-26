@@ -9,7 +9,7 @@
  */
 function get_page_content_file($area, $column)
 {
-  return 'https://' . get_setting('site_cdn_direct') . '/' . get_page_content($area, $column);
+    return 'https://' . get_setting('site_cdn_direct') . '/' . get_page_content($area, $column);
 }
 
 /**
@@ -23,7 +23,7 @@ function get_page_content_file($area, $column)
  */
 function get_page_content_mediafile($area, $column, $dimensions, $compression)
 {
-  return 'https://' . get_setting('site_cdn_direct') . '/media/' . $compression . '/' . $dimensions . '/' . get_page_content($area, $column);
+    return 'https://' . get_setting('site_cdn_direct') . '/media/' . $compression . '/' . $dimensions . '/' . get_page_content($area, $column);
 }
 
 /**
@@ -35,7 +35,7 @@ function get_page_content_mediafile($area, $column, $dimensions, $compression)
  */
 function get_page_content_string($area, $column)
 {
-  return get_page_content($area, $column);
+    return get_page_content($area, $column);
 }
 
 /**
@@ -47,11 +47,11 @@ function get_page_content_string($area, $column)
  */
 function get_page_content($area, $column = 'html')
 {
-  if (isset(NF::$site->content[$area]) && isset(NF::$site->content[$area][$column])) {
-    return NF::$site->content[$area][$column];
-  }
+    if (isset(NF::$site->content[$area]) && isset(NF::$site->content[$area][$column])) {
+        return NF::$site->content[$area][$column];
+    }
 
-  return null;
+    return null;
 }
 
 /**
@@ -65,7 +65,7 @@ function get_page_content($area, $column = 'html')
  */
 function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = null)
 {
-  return "<$tag class=\"$class\">" . get_page_content($area, $column) . "</$tag>";
+    return "<$tag class=\"$class\">" . get_page_content($area, $column) . "</$tag>";
 }
 
 /**
@@ -81,22 +81,21 @@ function get_page_content_wrap($area, $column = 'html', $tag = 'div', $class = n
  */
 function get_page_content_image($area, $column, $dimensions, $compression, $class = null, $fill = '255,255,255,0', $picture_class = null, $resolutions = [])
 {
-  if ($compression == 'o') {
-    $dimensions = '';
-  }
+    if ($compression == 'o') {
+        $dimensions = '';
+    }
 
-  $image = get_page_content($area, $column);
-  $alt = get_page_content($area, 'description');
-  $title = get_page_content($area, 'title');
+    $image = get_page_content($area, $column);
+    $alt = get_page_content($area, 'description');
+    $title = get_page_content($area, 'title');
 
-  if ($image) {
+    if ($image) {
+        $domain = get_setting('site_cdn_protocol') . '://' . get_setting('site_cdn_url');
+        $fill = ($compression === 'fill' ? ('/' . $fill) : '');
+        $url = '/media/' . $compression . '/' . $dimensions . $fill . '/' . $image;
+        $src = $domain . $url;
 
-    $domain = get_setting('site_cdn_protocol') . '://' . get_setting('site_cdn_url');
-    $fill = ($compression === 'fill' ? ('/' . $fill) : '');
-    $url = '/media/' . $compression . '/' . $dimensions . $fill . '/' . $image;
-    $src = $domain . $url;
-
-    return <<<HTML
+        return <<<HTML
     <picture class="$picture_class">
       <source srcset="$src?src=320w" media="(max-width: 320px)">
       <source srcset="$src?src=480w" media="(max-width: 480px)">
@@ -107,5 +106,5 @@ function get_page_content_image($area, $column, $dimensions, $compression, $clas
       <img class="$class" src="$src" alt="$alt" title="$title" />
     </picture>
 HTML;
-  }
+    }
 }

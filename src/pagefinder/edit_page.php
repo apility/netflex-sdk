@@ -22,7 +22,7 @@ $revision = $payload->revision_id ?? null;
 NF::$site->loadPage($page_id, $revision);
 
 foreach ($payload->session as $key => $value) {
-  $_SESSION[$key] = $value;
+    $_SESSION[$key] = $value;
 }
 
 $site = NF::$site;
@@ -34,9 +34,9 @@ $editmode = 0;
 $previewmode = 1;
 
 if ($payload->mode !== 'preview') {
-  $edit_tools = $payload->edit_tools;
-  $editmode = 1;
-  $previewmode = 0;
+    $edit_tools = $payload->edit_tools;
+    $editmode = 1;
+    $previewmode = 0;
 }
 
 $url_asset = null;
