@@ -30,7 +30,8 @@ final class Common_DisplayPageBlocksTest extends TestCase
             'sorting' => null,
             'name' => 'Test 1',
             'title' => 'nfabcdefghijklmno1',
-            'text' => 1
+            'text' => 1,
+            'published' => 1
           ],
           [
             'id' => 2,
@@ -39,7 +40,8 @@ final class Common_DisplayPageBlocksTest extends TestCase
             'sorting' => null,
             'name' => 'Test 2',
             'title' => 'nfabcdefghijklmno2',
-            'text' => 1
+            'text' => 1,
+            'published' => 1
           ]
         ]
       ))
