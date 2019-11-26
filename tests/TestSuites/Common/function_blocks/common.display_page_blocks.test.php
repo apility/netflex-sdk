@@ -41,7 +41,7 @@ final class Common_DisplayPageBlocksTest extends TestCase
             'name' => 'Test 2',
             'title' => 'nfabcdefghijklmno2',
             'text' => 1,
-            'published' => 1
+            'published' => 0
           ]
         ]
       ))
