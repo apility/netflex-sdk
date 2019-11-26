@@ -82,7 +82,7 @@
         "vendor/bin/php-cs-fixer fix src/ --rules=@PSR2"
       ],
       "pre-push": [
-        "vendor/bin/php-cs-fixer fix --dry-run src/ --rules@PSR2",
+        "vendor/bin/php-cs-fixer fix --dry-run src/ --rules@PSR2 --stop-on-violation",
         "composer run-script tests"
       ],
       "post-merge": "composer install"
