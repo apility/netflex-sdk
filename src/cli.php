@@ -1,6 +1,9 @@
 <?php
 
+global $_mode;
+
 $_GET['_path'] = '';
+$_mode = 'cli';
 
 NF::setRoot(realpath(__DIR__ . '/../../../../') . '/');
 NF::init();

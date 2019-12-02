@@ -67,6 +67,7 @@
     "spatie/phpunit-snapshot-assertions": "^2.1"
   },
   "scripts": {
-    "tests": "vendor/bin/phpunit --testdox --colors=always"
+    "tests": "vendor/bin/phpunit --testdox --colors=always",
+    "tests:update-snapshots": "vendor/bin/phpunit --colors=always -d --update-snapshots"
   }
 }

@@ -22,6 +22,13 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
 
   use FieldMapping;
 
+  /**
+   * Allows fetching of unpublished entries
+   *
+   * @var bool
+   */
+  protected static $_fetch_unpublished = true;
+
   protected static $_booted = false;
   protected static $_hooks = [];
   protected static $_existing_hooks = [
@@ -73,6 +80,33 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
     }
 
     static::bootUnlessBooted();
+  }
+
+  public function getPublishedAttribute ($published) {
+    global $_mode;
+
+    if ($published && $this->use_time) {
+      $start = null;
+      
+      try {
+        $start = Carbon::parse($this->start);
+      } catch (Exception $ex) {
+        $start = Carbon::parse(0);
+      }
+      
+      try {
+        $stop = $this->stop ? $this->stop : PHP_INT_MAX;
+        $stop = Carbon::parse($stop);
+      } catch (Exception $ex) {
+        $stop = Carbon::parse(PHP_INT_MAX);
+      }
+      
+      $now = Carbon::now();
+
+      return $now->gte($start) && $now->lte($stop);
+    }
+
+    return (bool) $published;
   }
 
   public function save()
@@ -273,7 +307,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
       $cacheKey = 'entry/' . $entry['id'];
       NF::$cache->save($cacheKey, $entry);
       return static::generateObject($entry);
-    }, $response))->values();
+    }, $response))->filter()->values();
   }
 
   public static function find($id)
@@ -386,7 +420,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function query(...$args)
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'query'], $args);
   }
@@ -394,7 +428,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function count()
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'count'], []);
   }
@@ -402,7 +436,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function where(...$args)
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'where'], $args);
   }
@@ -410,7 +444,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function pluck(...$args)
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'pluck'], $args);
   }
@@ -418,7 +452,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function whereBetween(...$args)
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'whereBetween'], $args);
   }
@@ -426,7 +460,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function orderBy(...$args)
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'orderBy'], $args);
   }
@@ -434,7 +468,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function first()
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'firstOrFail'], []);
   }
@@ -442,7 +476,7 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
   public static function paginate(...$args)
   {
     $structureId = (new static)->directory;
-    $query = new StructureQuery($structureId, new static);
+    $query = new StructureQuery($structureId, new static, static::$_fetch_unpublished);
 
     return call_user_func_array([$query, 'paginate'], $args);
   }
@@ -462,7 +496,15 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
       return $revision;
     }
 
-    return new static($data);
+    $entry = new static($data);
+
+    if ($entry) {
+      if (!$_mode && static::$_fetch_unpublished === false || static::$_fetch_unpublished === false && $_mode === 'cli') {
+        return $entry->published ? $entry : null;
+      }
+
+      return $entry;
+    }
   }
 
   private static function bootUnlessBooted()
