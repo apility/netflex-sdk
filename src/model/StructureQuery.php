@@ -26,13 +26,17 @@ class StructureQuery
   private $_firstPageSize = null;
   private $_fieldsModified = false;
 
-  public function __construct($directory, $class)
+  public function __construct($directory, $class, $fetchUnpublished = true)
   {
     $this->_class = $class;
     $this->_directory = $directory;
     $this->_search = new ElasticSearch();
     $this->_search->directory($this->_directory);
     $this->_search->limit(10000);
+
+    if (!$fetchUnpublished) {
+      $this->_search->where('published', true);
+    }
   }
 
   private function isArgsArray($args)
