@@ -50,7 +50,7 @@ function check_login($username, $password, $groups = '99999', $field = 'mail')
  *
  * @param string $username = null
  * @param string $groups = null
- * @return int
+ * @return boolean
  */
 function check_access($username = null, $groups = null)
 {
@@ -63,18 +63,14 @@ function check_access($username = null, $groups = null)
         );
 
       if (isset($customer['id']) && $groups == '99999') {
-        return 1;
+        return true;
       }
 
       if (isset($customer['id']) && in_array($groups, $customer['groups'])) {
-        return 1;
-      }
-
-      if (isset($customer['id'])) {
-        return 2;
+        return true;
       }
     } catch (Exception $e) {}
 
-    return 0;
+    return false;
   }
 }
