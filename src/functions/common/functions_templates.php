@@ -17,27 +17,30 @@ function get_template_part($alias)
   NF::debug('templates/' . $templatealias . '/' . $alias, '!part');
 }
 
-/**
- * Get block template
- *
- * @param string $alias
- * @param array $vars = []
- * @return void
- */
-function get_block($alias, $vars = [])
-{
-  global $page;
-  global $url_asset;
 
-  if (is_array($vars)) {
-    extract($vars, EXTR_SKIP);
+
+if(!function_exists('get_block')) {
+  /**
+   * Get block template
+   *
+   * @param string $alias
+   * @param array $vars = []
+   * @return void
+   */
+  function get_block($alias, $vars = [])
+  {
+    global $page;
+    global $url_asset;
+
+    if (is_array($vars)) {
+      extract($vars, EXTR_SKIP);
+    }
+
+    NF::debug('blocks/' . $alias, 'block');
+    require(NF::$site_root . 'blocks/' . $alias . '.php');
+    NF::debug('blocks/' . $alias, '!block');
   }
-
-  NF::debug('blocks/' . $alias, 'block');
-  require(NF::$site_root . 'blocks/' . $alias . '.php');
-  NF::debug('blocks/' . $alias, '!block');
 }
-
 /**
  * Get content inside block
  *
