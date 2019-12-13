@@ -87,20 +87,20 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
 
     if ($published && $this->use_time) {
       $start = null;
-      
+
       try {
         $start = Carbon::parse($this->start);
       } catch (Exception $ex) {
         $start = Carbon::parse(0);
       }
-      
+
       try {
         $stop = $this->stop ? $this->stop : PHP_INT_MAX;
         $stop = Carbon::parse($stop);
       } catch (Exception $ex) {
         $stop = Carbon::parse(PHP_INT_MAX);
       }
-      
+
       $now = Carbon::now();
 
       return $now->gte($start) && $now->lte($stop);
@@ -348,16 +348,16 @@ abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
         $response = NF::$capi->get($url);
         $data = json_decode($response->getBody(), true);
 
-        if (!$data || $data['directory_id'] != $structureId) {
-          $data = null;
-        }
-
         if ($data && !isset($entry_override)) {
           NF::$cache->save($cacheKey, $data);
         }
       }
 
       if ($data) {
+        if (!$data || ($data['directory_id'] != $structureId)) {
+          return null;
+        }
+
         return static::generateObject($data);
       }
     } catch (Exception $ex) { /* intentionally left blank */ }
