@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d91802fbd874de0fe59bc9b7291f934",
+    "content-hash": "f241ef9b6fe04b0e23e6975fd283671c",
     "packages": [
         {
             "name": "apility/netflex-api",
@@ -46,16 +46,16 @@
         },
         {
             "name": "apility/netflex-support",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apility/netflex-support.git",
-                "reference": "a32eb6c705b49e564bab64c5f1776652dc06abd4"
+                "reference": "bd6ede580ee0d17ec37239567334eb7b7afd875b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apility/netflex-support/zipball/a32eb6c705b49e564bab64c5f1776652dc06abd4",
-                "reference": "a32eb6c705b49e564bab64c5f1776652dc06abd4",
+                "url": "https://api.github.com/repos/apility/netflex-support/zipball/bd6ede580ee0d17ec37239567334eb7b7afd875b",
+                "reference": "bd6ede580ee0d17ec37239567334eb7b7afd875b",
                 "shasum": ""
             },
             "require": {
@@ -83,7 +83,7 @@
                     "email": "thomas@apility.no"
                 }
             ],
-            "time": "2019-12-18T13:44:42+00:00"
+            "time": "2019-12-18T14:18:31+00:00"
         },
         {
             "name": "apility/webpack-assets",
@@ -472,16 +472,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.27.0",
+            "version": "2.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "13b8485a8690f103bf19cba64879c218b102b726"
+                "reference": "e2bcbcd43e67ee6101d321d5de916251d2870ca8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/13b8485a8690f103bf19cba64879c218b102b726",
-                "reference": "13b8485a8690f103bf19cba64879c218b102b726",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/e2bcbcd43e67ee6101d321d5de916251d2870ca8",
+                "reference": "e2bcbcd43e67ee6101d321d5de916251d2870ca8",
                 "shasum": ""
             },
             "require": {
@@ -538,7 +538,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-11-20T06:59:06+00:00"
+            "time": "2019-12-16T16:30:25+00:00"
         },
         {
             "name": "nikic/php-parser",

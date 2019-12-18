@@ -69,5 +69,10 @@
   "scripts": {
     "tests": "vendor/bin/phpunit --testdox --colors=always",
     "tests:update-snapshots": "vendor/bin/phpunit --colors=always -d --update-snapshots"
+  },
+  "suggest": {
+    "apility/attribute-list": "Helper class for generating attribute lists for Vue components",
+    "apility/opengraph": "Helper library for creating OpenGraph meta tags",
+    "apility/netflex-commerce": "Makes it easier to work with the Netflex Commerce API"
   }
 }
