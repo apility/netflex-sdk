@@ -16,7 +16,22 @@ use Illuminate\Support\Collection;
 require_once(__DIR__ . '/FieldMapping.php');
 require_once(__DIR__ . '/StructureQuery.php');
 require_once(__DIR__ . '/RevisionCollection.php');
-
+/**
+ * @property int $directory_id
+ * @property string $title
+ * @property string $url
+ * @property int $revision
+ * @property string $created
+ * @property string $updated
+ * @property bool $published
+ * @property string $author
+ * @property int $userid
+ * @property bool $use_time
+ * @property string $start
+ * @property string $stop
+ * @property string[] $tags
+ * @property boolean $public
+ */
 abstract class Structure implements ArrayAccess, Serializable, JsonSerializable
 {
 
