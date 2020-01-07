@@ -4,6 +4,7 @@ namespace Netflex\Site;
 
 use Exception;
 use GuzzleHttp\Client;
+use NF;
 
 class PDF {
 
@@ -141,7 +142,7 @@ class PDF {
 
     if ($url) {
       header('Content-Type: application/pdf');
-      $pdf = $this->client->get($response->url)
+      $pdf = $this->client->get($url)
         ->getBody()
         ->getContents();
 
